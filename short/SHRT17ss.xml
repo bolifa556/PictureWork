@@ -1,0 +1,5677 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<RETA format="free">
+  <SIM name="sim" type="Simulation">
+    transient       = true
+    start_time      = -15000.0
+    end_time        = 0.0
+    dt              = 10.0
+    dt_minimum      = 1.0e-6
+    n_steps         = 100000
+    nl_abs_tol      = 1.0e-6
+    nl_rel_tol      = 1.0e-8
+    nl_max_iters    = 20
+    initial_p       = 2.0e5
+    initial_u       = 3.0
+    initial_T       = 624.71
+    initial_Ts      = 624.71
+    p_scaling       = 1.0e-2
+    u_scaling       = 1.0e-2
+    T_scaling       = 1.0e-3
+    Ts_scaling      = 1.0
+    output_interval = 5
+    checkpoint      = true
+    add_hs_exodus   = false
+  </SIM>
+  <EOS>
+    <C name="eos"  type="Sodium">
+    </C>
+  </EOS>
+  <Function>
+    <C name="UFsRho" type="TableFunction">
+      axis       = t
+      xi         = 233 283 333 383 433 483 533 583 633 683 733 783 833 883 933 983 1033 1083 1133 1183 1233 1283
+      yi         = 18235 18191 18147 18103 18060 18016 17973 17930 17887 17844 17802 17760 17697 17551 17445 17393 17341 17289 17237 17186 17135 17084
+      multiplier = 1.0
+    </C>
+    <C name="UFsCp" type="TableFunction">
+      axis       = t
+      xi         = 233 283 333 383 433 483 533 583 633 683 733 783 833 883 933 983 1033 1083 1133 1183 1233 1283
+      yi         = 152 159 168 178 190 204 219 235 254 273 295 318 342 355 344 302 268 241 220 207 200 201
+      multiplier = 1.0
+    </C>
+    <!-- Fresh fuel with 0 porosity of gas and sodium -->
+    <C name="UFsK" type="TableFunction">
+      axis       = t
+      xi         = 233 283 333 383 433 483 533 583 633 683 733 783 833 883 933 983 1033 1083 1133 1183 1233 1283
+      yi         = 12.9 14.4 15.9 17.4 18.9 20.5 22.1 23.6 25.2 26.8 28.4 30.1 31.7 33.4 35.1 36.8 38.5 40.2 42.0 43.7 45.5 47.3
+      multiplier = 1.0
+    </C>
+    <C name="GapSodiumK" type="FParserFunction">
+      value = 93-0.0581*(t-273)+1.173e-5*(t-273)*(t-273)
+    </C>
+    <C name="power_history_fn" type="TableFunction">
+      axis = t
+      xi   = 0 1 2 3.5 5 7.5 10 15 22.5 30 40 50 60 90 120 180 240 300 360 420 480 540 600 660 720 780 840 900
+      yi   = 1. 1.98E-01 1.71E-01 1.46E-01 1.29E-01 1.10E-01 9.71E-02 8.06E-02 6.63E-02 5.73E-02 4.87E-02 4.26E-02 3.82E-02 3.02E-02 2.60E-02 2.13E-02 1.92E-02 1.78E-02 1.68E-02 1.61E-02 1.54E-02 1.47E-02 1.43E-02 1.38E-02 1.33E-02 1.31E-02 1.26E-02 1.22E-02
+    </C>
+    <C name="power_shape_fn" type="FParserFunction">
+      value = sin(pi*(z+0.1155)/0.6)
+    </C>
+    <C name="pump1_speed_fn" type="TableFunction">
+      axis       = t
+      xi         = 0 2 4 6.5 9 12.5 17.5 24.5 33 42 51 90 120 180 240 300 360 420 480 540 600 660 720 780 840 900
+      yi         = 799.03 727.77 566.79 407.49 323.18 244.06 172.5 109.25 56.46 0.69 0.76 0.76 0.61 0.76 0.84 0.61 0.61 0.61 0.61 0.76 0.76 0.69 0.69 0.76 0.76 0.92
+      multiplier = 1.666666667e-2
+    </C>
+    <C name="pump2_speed_fn" type="TableFunction">
+      axis       = t
+      xi         = 0 2 4 6.5 9 12.5 17.5 24.5 33 42 51 90 120 180 240 300 360 420 480 540 600 660 720 780 840 900
+      yi         = 764.92 695.42 532.61 379.64 301.59 230.18 167.39 113.98 74.62 46.54 2.29 2.44 2.44 2.44 2.59 2.44 2.44 2.44 2.44 2.44 2.75 2.44 2.44 2.59 2.44 2.44
+      multiplier = 1.666666667e-2
+    </C>
+    <C name="UinS_fn" type="TableFunction">
+      axis       = t
+      xi         = 0 1 2.5 6 16.5 30 60 120 180 240 300 360 420 480 540 600 660 720 780 840 900
+      yi         = 1. 7.51E-01 5.04E-01 2.84E-01 1.35E-01 9.09E-02 6.83E-02 5.84E-02 5.87E-02 6.11E-02 6.60E-02 6.98E-02 7.07E-02 7.18E-02 7.09E-02 7.56E-02 7.11E-02 6.57E-02 6.36E-02 6.06E-02 5.53E-02
+      multiplier = 0.82682
+    </C>
+    <C name="TinS_fn" type="TableFunction">
+      axis = t
+      xi   = 0 60 120 180 240 300 360 420 480 540 600 660 720 780 840 900
+      yi   = 574.27 574.18 574.07 574.11 573.91 573.50 573.24 572.89 572.61 572.52 572.18 571.38 570.06 568.53 566.70 565.28
+    </C>
+    <C name="timestep_fn" type="TableFunction">
+      axis = t
+      xi   = 0   100  150 180
+      yi   = 0.1 0.1 1.0 2.0
+    </C>
+  </Function>
+  <Material>
+    <C name="fuel" type="GenericMaterial">
+      rho = UFsRho
+      cp  = UFsCp
+      k   = UFsK
+    </C>
+    <C name="gap" type="GenericMaterial">
+      rho = 970.0
+      cp  = 1356.0
+      k   = GapSodiumK
+    </C>
+    <C name="ss304" type="StainlessSteel">
+      ss_type = SS304
+    </C>
+    <C name="ss316" type="StainlessSteel">
+      ss_type = SS316
+    </C>
+  </Material>
+  <Component>
+    <!--
+    |***********************************************************************
+    |  Reactor core with 35 channels
+    |***********************************************************************
+    -->
+    <!-- ReactorPower component
+      * Power : steady-state fission power
+      * power_history: transient power history
+    -->
+    <C name="rp" type="ReactorPower">
+      Power = 57.3e6
+      power_history = power_history_fn
+    </C>
+    <!--
+    |***********************************************************************
+    |  Driver: Driver fuel assembly, n_pin =91
+    |  Info: Row 2 drivers 2 fueled experiments
+    |***********************************************************************
+    -->
+    <C name="CH1LA" type="Pipe">
+      origin    = 0.000 0.000 -0.999
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.415
+      n_elems   = 8
+      A         = 1.116e-03
+      Dh        = 3.769e-02
+      roughness = 1.000e-06
+      Nc = 6
+      cylinder       = true
+      width          = 3.378e-3
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH1LS1" type="Pipe">
+      origin    = 0.000 0.000 -0.584
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 6
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH1LS2" type="AnnularPipe">
+      origin    = 0.000 0.000 -0.399
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.188
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 6
+      cylinder              = true
+      inner_radius          = 0.0
+      width                 = 2.223E-02
+      aw                    = 89.99
+      material              = ss316
+      n_radial_elems        = 4
+      cylinder_second       = false
+      aw_second             = 165.20
+      width_second          = 1.016e-03
+      material_second       = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH1LS3" type="Pipe">
+      origin    = 0.000 0.000 -0.211
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.211
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 6
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH1" type="DuctCoreChannel">
+      origin    = 0.000 0.000 0.000
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.369
+      n_elems   = 12
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 6
+      fric_type           = 1
+      HoD                 = 26.97
+      cylinder            = true
+      inner_radius        = 0.
+      aw                  = 1032.37
+      width               = 1.68e-3 2.1e-4 3.15e-4
+      n_radial_elems      = 8 2 2
+      material            = fuel gap ss316
+      geom_type           = RodBundle
+      PoD                 = 1.333
+      aw_duct             = 162.11
+      width_duct          = 1.016e-3
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 91.
+      power_fraction = 9.138e-02 0 0
+      axial_power_shape   = power_shape_fn
+    </C>
+    <C name="CH1Gp" type="AnnularPipe">
+      origin    = 0.000 0.000 0.369
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.227
+      n_elems   = 5
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 6
+      fric_type             = 1
+      PoD                   = 1.333
+      HoD                   = 26.97
+      cylinder              = true
+      aw                    = 1032.37
+      inner_radius          = 1.89e-3
+      width                 = 3.15e-4
+      n_radial_elems        = 2
+      material              = ss316
+      cylinder_second       = false
+      aw_second             = 162.11
+      width_second          = 1.016e-3
+      n_radial_elems_second = 4
+      material_second       = ss316
+    </C>
+    <C name="CH1US1" type="Pipe">
+      origin    = 0.000 0.000 0.596
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 6
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH1US" type="AnnularPipe">
+      origin    = 0.000 0.000 0.781
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.273
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 6
+      cylinder              = true
+      inner_radius          = 0.0
+      width                 = 2.223E-02
+      aw                    = 89.99
+      material              = ss316
+      n_radial_elems        = 4
+      cylinder_second       = false
+      aw_second             = 165.20
+      width_second          = 1.016e-03
+      material_second       = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH1B" type="PipeNet">
+      eos      = eos
+      channels = CH1LA CH1LS1 CH1LS2 CH1LS3 CH1 CH1Gp CH1US1 CH1US
+    </C>
+    <!--
+    |***********************************************************************
+    |  Driver: Driver fuel assembly, n_pin =91
+    |  Info: Row 3 drivers
+    |***********************************************************************
+    -->
+    <C name="CH2LA" type="Pipe">
+      origin    = 0.000 0.045 -0.999
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.415
+      n_elems   = 8
+      A         = 1.116e-03
+      Dh        = 3.769e-02
+      roughness = 1.000e-06
+      Nc = 10
+      cylinder       = true
+      width          = 3.378e-3
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH2LS1" type="Pipe">
+      origin    = 0.000 0.045 -0.584
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 10
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH2LS2" type="AnnularPipe">
+      origin    = 0.000 0.045 -0.399
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.188
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 10
+      cylinder              = true
+      inner_radius          = 0.0
+      width                 = 2.223E-02
+      aw                    = 89.99
+      material              = ss316
+      n_radial_elems        = 4
+      cylinder_second       = false
+      aw_second             = 165.20
+      width_second          = 1.016e-03
+      material_second       = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH2LS3" type="Pipe">
+      origin    = 0.000 0.045 -0.211
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.211
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 10
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH2" type="DuctCoreChannel">
+      origin    = 0.000 0.045 0.000
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.369
+      n_elems   = 12
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 10
+      fric_type           = 1
+      HoD                 = 26.97
+      cylinder            = true
+      inner_radius        = 0.
+      aw                  = 1032.37
+      width               = 1.68e-3 2.1e-4 3.15e-4
+      n_radial_elems      = 8 2 2
+      material            = fuel gap ss316
+      geom_type           = RodBundle
+      PoD                 = 1.333
+      aw_duct             = 162.11
+      width_duct          = 1.016e-3
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 91.
+      power_fraction = 1.422e-01 0 0
+      axial_power_shape   = power_shape_fn
+    </C>
+    <C name="CH2Gp" type="AnnularPipe">
+      origin    = 0.000 0.045 0.369
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.227
+      n_elems   = 5
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 10
+      fric_type             = 1
+      PoD                   = 1.333
+      HoD                   = 26.97
+      cylinder              = true
+      aw                    = 1032.37
+      inner_radius          = 1.89e-3
+      width                 = 3.15e-4
+      n_radial_elems        = 2
+      material              = ss316
+      cylinder_second       = false
+      aw_second             = 162.11
+      width_second          = 1.016e-3
+      n_radial_elems_second = 4
+      material_second       = ss316
+    </C>
+    <C name="CH2US1" type="Pipe">
+      origin    = 0.000 0.045 0.596
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 10
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH2US" type="AnnularPipe">
+      origin    = 0.000 0.045 0.781
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.273
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 10
+      cylinder              = true
+      inner_radius          = 0.0
+      width                 = 2.223E-02
+      aw                    = 89.99
+      material              = ss316
+      n_radial_elems        = 4
+      cylinder_second       = false
+      aw_second             = 165.20
+      width_second          = 1.016e-03
+      material_second       = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH2B" type="PipeNet">
+      eos      = eos
+      channels = CH2LA CH2LS1 CH2LS2 CH2LS3 CH2 CH2Gp CH2US1 CH2US
+    </C>
+    <!--
+    |***********************************************************************
+    |  Driver: Driver fuel assembly, n_pin =91
+    |  Info: Row 4 drivers 4 fueled experiments
+    |***********************************************************************
+    -->
+    <C name="CH3LA" type="Pipe">
+      origin    = 0.000 0.090 -0.999
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.415
+      n_elems   = 8
+      A         = 1.116e-03
+      Dh        = 3.769e-02
+      roughness = 1.000e-06
+      Nc = 14
+      cylinder       = true
+      width          = 3.378e-3
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH3LS1" type="Pipe">
+      origin    = 0.000 0.090 -0.584
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 14
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH3LS2" type="AnnularPipe">
+      origin    = 0.000 0.090 -0.399
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.188
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 14
+      cylinder              = true
+      inner_radius          = 0.0
+      width                 = 2.223E-02
+      aw                    = 89.99
+      material              = ss316
+      n_radial_elems        = 4
+      cylinder_second       = false
+      aw_second             = 165.20
+      width_second          = 1.016e-03
+      material_second       = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH3LS3" type="Pipe">
+      origin    = 0.000 0.090 -0.211
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.211
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 14
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH3" type="DuctCoreChannel">
+      origin    = 0.000 0.090 0.000
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.369
+      n_elems   = 12
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 14
+      fric_type           = 1
+      HoD                 = 26.97
+      cylinder            = true
+      inner_radius        = 0.
+      aw                  = 1032.37
+      width               = 1.68e-3 2.1e-4 3.15e-4
+      n_radial_elems      = 8 2 2
+      material            = fuel gap ss316
+      geom_type           = RodBundle
+      PoD                 = 1.333
+      aw_duct             = 162.11
+      width_duct          = 1.016e-3
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 91.
+      power_fraction = 1.868e-01 0 0
+      axial_power_shape   = power_shape_fn
+    </C>
+    <C name="CH3Gp" type="AnnularPipe">
+      origin    = 0.000 0.090 0.369
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.227
+      n_elems   = 5
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 14
+      fric_type             = 1
+      PoD                   = 1.333
+      HoD                   = 26.97
+      cylinder              = true
+      aw                    = 1032.37
+      inner_radius          = 1.89e-3
+      width                 = 3.15e-4
+      n_radial_elems        = 2
+      material              = ss316
+      cylinder_second       = false
+      aw_second             = 162.11
+      width_second          = 1.016e-3
+      n_radial_elems_second = 4
+      material_second       = ss316
+    </C>
+    <C name="CH3US1" type="Pipe">
+      origin    = 0.000 0.090 0.596
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 14
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH3US" type="AnnularPipe">
+      origin    = 0.000 0.090 0.781
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.273
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 14
+      cylinder              = true
+      inner_radius          = 0.0
+      width                 = 2.223E-02
+      aw                    = 89.99
+      material              = ss316
+      n_radial_elems        = 4
+      cylinder_second       = false
+      aw_second             = 165.20
+      width_second          = 1.016e-03
+      material_second       = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH3B" type="PipeNet">
+      eos      = eos
+      channels = CH3LA CH3LS1 CH3LS2 CH3LS3 CH3 CH3Gp CH3US1 CH3US
+    </C>
+    <!--
+    |***********************************************************************
+    |  Driver: Driver fuel assembly, n_pin =91
+    |  Info: Row 5 driver 1 fueled experiment
+    |***********************************************************************
+    -->
+    <C name="CH4LA" type="Pipe">
+      origin    = 0.000 0.135 -0.999
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.415
+      n_elems   = 8
+      A         = 1.116e-03
+      Dh        = 3.769e-02
+      roughness = 1.000e-06
+      Nc = 3
+      cylinder       = true
+      width          = 3.378e-3
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH4LS1" type="Pipe">
+      origin    = 0.000 0.135 -0.584
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 3
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH4LS2" type="AnnularPipe">
+      origin    = 0.000 0.135 -0.399
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.188
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 3
+      cylinder              = true
+      inner_radius          = 0.0
+      width                 = 2.223E-02
+      aw                    = 89.99
+      material              = ss316
+      n_radial_elems        = 4
+      cylinder_second       = false
+      aw_second             = 165.20
+      width_second          = 1.016e-03
+      material_second       = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH4LS3" type="Pipe">
+      origin    = 0.000 0.135 -0.211
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.211
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 3
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH4" type="DuctCoreChannel">
+      origin    = 0.000 0.135 0.000
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.369
+      n_elems   = 12
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 3
+      fric_type           = 1
+      HoD                 = 26.97
+      cylinder            = true
+      inner_radius        = 0.
+      aw                  = 1032.37
+      width               = 1.68e-3 2.1e-4 3.15e-4
+      n_radial_elems      = 8 2 2
+      material            = fuel gap ss316
+      geom_type           = RodBundle
+      PoD                 = 1.333
+      aw_duct             = 162.11
+      width_duct          = 1.016e-3
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 91.
+      power_fraction = 3.545e-02 0 0
+      axial_power_shape   = power_shape_fn
+    </C>
+    <C name="CH4Gp" type="AnnularPipe">
+      origin    = 0.000 0.135 0.369
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.227
+      n_elems   = 5
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 3
+      fric_type             = 1
+      PoD                   = 1.333
+      HoD                   = 26.97
+      cylinder              = true
+      aw                    = 1032.37
+      inner_radius          = 1.89e-3
+      width                 = 3.15e-4
+      n_radial_elems        = 2
+      material              = ss316
+      cylinder_second       = false
+      aw_second             = 162.11
+      width_second          = 1.016e-3
+      n_radial_elems_second = 4
+      material_second       = ss316
+    </C>
+    <C name="CH4US1" type="Pipe">
+      origin    = 0.000 0.135 0.596
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 3
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH4US" type="AnnularPipe">
+      origin    = 0.000 0.135 0.781
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.273
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 3
+      cylinder              = true
+      inner_radius          = 0.0
+      width                 = 2.223E-02
+      aw                    = 89.99
+      material              = ss316
+      n_radial_elems        = 4
+      cylinder_second       = false
+      aw_second             = 165.20
+      width_second          = 1.016e-03
+      material_second       = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH4B" type="PipeNet">
+      eos      = eos
+      channels = CH4LA CH4LS1 CH4LS2 CH4LS3 CH4 CH4Gp CH4US1 CH4US
+    </C>
+    <!--
+    |***********************************************************************
+    |  Driver: Driver fuel assembly, n_pin =91
+    |  Info: Row 6 high flow drivers
+    |***********************************************************************
+    -->
+    <C name="CH5LA" type="Pipe">
+      origin    = 0.000 0.180 -0.999
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.415
+      n_elems   = 8
+      A         = 1.116e-03
+      Dh        = 3.769e-02
+      roughness = 1.000e-06
+      Nc = 14
+      cylinder       = true
+      width          = 3.378e-3
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH5LS1" type="Pipe">
+      origin    = 0.000 0.180 -0.584
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 14
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH5LS2" type="AnnularPipe">
+      origin    = 0.000 0.180 -0.399
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.188
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 14
+      cylinder              = true
+      inner_radius          = 0.0
+      width                 = 2.223E-02
+      aw                    = 89.99
+      material              = ss316
+      n_radial_elems        = 4
+      cylinder_second       = false
+      aw_second             = 165.20
+      width_second          = 1.016e-03
+      material_second       = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH5LS3" type="Pipe">
+      origin    = 0.000 0.180 -0.211
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.211
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 14
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH5" type="DuctCoreChannel">
+      origin    = 0.000 0.180 0.000
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.369
+      n_elems   = 12
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 14
+      fric_type           = 1
+      HoD                 = 26.97
+      cylinder            = true
+      inner_radius        = 0.
+      aw                  = 1032.37
+      width               = 1.68e-3 2.1e-4 3.15e-4
+      n_radial_elems      = 8 2 2
+      material            = fuel gap ss316
+      geom_type           = RodBundle
+      PoD                 = 1.333
+      aw_duct             = 162.11
+      width_duct          = 1.016e-3
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 91.
+      power_fraction = 1.499e-01 0 0
+      axial_power_shape   = power_shape_fn
+    </C>
+    <C name="CH5Gp" type="AnnularPipe">
+      origin    = 0.000 0.180 0.369
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.227
+      n_elems   = 5
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 14
+      fric_type             = 1
+      PoD                   = 1.333
+      HoD                   = 26.97
+      cylinder              = true
+      aw                    = 1032.37
+      inner_radius          = 1.89e-3
+      width                 = 3.15e-4
+      n_radial_elems        = 2
+      material              = ss316
+      cylinder_second       = false
+      aw_second             = 162.11
+      width_second          = 1.016e-3
+      n_radial_elems_second = 4
+      material_second       = ss316
+    </C>
+    <C name="CH5US1" type="Pipe">
+      origin    = 0.000 0.180 0.596
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 14
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH5US" type="AnnularPipe">
+      origin    = 0.000 0.180 0.781
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.273
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 14
+      cylinder              = true
+      inner_radius          = 0.0
+      width                 = 2.223E-02
+      aw                    = 89.99
+      material              = ss316
+      n_radial_elems        = 4
+      cylinder_second       = false
+      aw_second             = 165.20
+      width_second          = 1.016e-03
+      material_second       = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH5B" type="PipeNet">
+      eos      = eos
+      channels = CH5LA CH5LS1 CH5LS2 CH5LS3 CH5 CH5Gp CH5US1 CH5US
+    </C>
+    <!--
+    |*************************************************************************************
+    |  IRE: Inner reflector assembly, n_pin = 1
+    |  Info: Rows 6 and 7 reflectors
+    |*************************************************************************************
+    -->
+    <C name="CH6LA" type="Pipe">
+      origin    = 0.000 0.225 -0.999
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.419
+      n_elems   = 8
+      A         = 6.413e-04
+      Dh        = 2.858e-02
+      roughness = 1.000e-06
+      Nc = 35
+      cylinder       = true
+      width          = 7.632E-03
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH6" type="DuctCoreChannel">
+      origin    = 0.000 0.225 -0.580
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 1.565
+      n_elems   = 20
+      A         = 4.658e-04
+      Dh        = 3.591e-03
+      roughness = 1.000e-06
+      Nc = 35
+      cylinder       = true
+      aw             = 370.90
+      inner_radius   = 0.
+      width          = 2.750E-02
+      n_radial_elems = 8
+      material       = ss316
+      aw_duct             = 424.98
+      width_duct          = 1.016e-3
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 1
+      power_fraction = 7.348e-03
+    </C>
+    <C name="CH6US" type="Pipe">
+      origin    = 0.000 0.225 0.985
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.069
+      n_elems   = 4
+      A         = 2.729e-03
+      Dh        = 5.613e-02
+      roughness = 1.000e-06
+      Nc = 35
+      cylinder  = false
+      aw        = 71.26
+      width     = 1.016E-03
+      material  = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH6B" type="PipeNet">
+      eos      = eos
+      channels = CH6LA CH6 CH6US
+    </C>
+    <!--
+    |***********************************************************************
+    |  PAD: Partial driver fuel assembly, n_pin = 46
+    |  Info:  All partial drivers
+    |***********************************************************************
+    -->
+    <C name="CH7LA" type="Pipe">
+      origin    = 0.000 0.270 -0.999
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.415
+      n_elems   = 8
+      A         = 1.116e-03
+      Dh        = 3.769e-02
+      roughness = 1.000e-06
+      Nc = 8
+      cylinder       = true
+      width          = 3.378e-3
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH7LS1" type="Pipe">
+      origin    = 0.000 0.270 -0.584
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 8
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH7LS2" type="AnnularPipe">
+      origin    = 0.000 0.270 -0.399
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.188
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 8
+      cylinder       = true
+      inner_radius   = 0.0
+      width          = 2.223E-02
+      aw             = 89.99
+      material       = ss316
+      n_radial_elems = 4
+      cylinder_second = false
+      aw_second       = 165.20
+      width_second    = 1.016e-03
+      material_second = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH7LS3" type="Pipe">
+      origin    = 0.000 0.270 -0.211
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.211
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 8
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH7" type="DuctCoreChannel">
+      origin    = 0.000 0.270 0.000
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.369
+      n_elems   = 12
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 8
+      fric_type           = 1
+      HoD                 = 26.97
+      cylinder            = true
+      inner_radius        = 0.
+      aw                  = 521.857
+      width               = 1.68e-3 2.1e-4 3.15e-4
+      n_radial_elems      = 8 2 2
+      material            = fuel gap ss316
+      geom_type           = RodBundle
+      PoD                 = 1.333
+      aw_duct             = 162.11
+      width_duct          = 1.016e-3
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 46
+      power_fraction = 4.686e-02 0 0
+      axial_power_shape   = power_shape_fn
+    </C>
+    <C name="CH7W1" type="ConvectiveHeatTransfer">
+      channel  = CH7
+      wall     = CH7S1:outer
+      reverse  = false
+      n_elems  = 12
+      aw       = 510.513
+    </C>
+    <!-- steel rod in partial driver assembly -->
+    <C name="CH7S1" type="HeatStructure">
+      origin    = 0.000 0.270 0.
+      direction      = 0. 0. 1.
+      cylinder       = true
+      length         = 0.369
+      inner_radius   = 0.
+      n_elems        = 12
+      width          = 2.205e-3
+      n_radial_elems = 5
+      material       = ss316
+      outer_bc_type  = None
+    </C>
+    <C name="CH7Gp" type="AnnularPipe">
+      origin    = 0.000 0.270 0.369
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.227
+      n_elems   = 5
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 8
+      fric_type             = 1
+      PoD                   = 1.333
+      HoD                   = 26.97
+      cylinder              = true
+      aw                    = 1032.37
+      inner_radius          = 1.89e-3
+      width                 = 3.15e-4
+      n_radial_elems        = 2
+      material              = ss316
+      cylinder_second       = false
+      aw_second             = 162.11
+      width_second          = 1.016e-3
+      n_radial_elems_second = 4
+      material_second       = ss316
+    </C>
+    <C name="CH7W1Gp" type="ConvectiveHeatTransfer">
+      channel  = CH7Gp
+      wall     = CH7S1Gp:outer
+      reverse  = false
+      n_elems  = 5
+      aw       = 510.513
+    </C>
+    <!-- steel rod in partial driver assembly -->
+    <C name="CH7S1Gp" type="HeatStructure">
+      origin    = 0.000 0.270 0.369
+      direction      = 0. 0. 1.
+      cylinder       = true
+      length         = 0.227
+      inner_radius   = 0.
+      n_elems        = 5
+      width          = 2.205e-3
+      n_radial_elems = 5
+      material       = ss316
+      outer_bc_type  = None
+    </C>
+    <C name="CH7US1" type="Pipe">
+      origin    = 0.000 0.270 0.596
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 8
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH7US" type="AnnularPipe">
+      origin    = 0.000 0.270 0.781
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.273
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 8
+      cylinder       = true
+      inner_radius   = 0.0
+      width          = 2.223E-02
+      aw             = 89.99
+      material       = ss316
+      n_radial_elems = 4
+      cylinder_second = false
+      aw_second       = 165.20
+      width_second    = 1.016e-03
+      material_second = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH7B" type="PipeNet">
+      eos      = eos
+      channels = CH7LA CH7LS1 CH7LS2 CH7LS3 CH7 CH7Gp CH7US1 CH7US
+    </C>
+    <!--
+    |*************************************************************************************
+    |  CRD: Control rod assembly, n_pin = 61
+    |  Info: High worth control rods
+    |*************************************************************************************
+    -->
+    <C name="CH8LA" type="AnnularPipe">
+      origin    = 0.000 0.315 -0.999
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.560
+      n_elems   = 5
+      A         = 6.618e-04
+      Dh        = 1.439e-02
+      roughness = 1.000e-06
+      Nc = 8
+      cylinder              = true
+      inner_radius          = 0.0
+      width                 = 4.848E-03
+      aw                    = 83.64
+      material              = ss316
+      n_radial_elems        = 4
+      cylinder_second       = true
+      inner_radius_second   = 1.651e-2
+      aw_second             = 156.74
+      width_second          = 4.950E-03
+      material_second       = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH8LS" type="Pipe">
+      origin    = 0.000 0.315 -0.439
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.228
+      n_elems   = 5
+      A         = 3.202e-04
+      Dh        = 2.019e-02
+      roughness = 1.000e-06
+      Nc = 8
+      cylinder       = true
+      width          = 1.412E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH8" type="DuctCoreChannel">
+      origin    = 0.000 0.315 -0.211
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.369
+      n_elems   = 12
+      A         = 8.540e-04
+      Dh        = 2.737e-03
+      roughness = 1.000e-06
+      Nc = 8
+      fric_type           = 1
+      HoD                 = 26.97
+      cylinder            = true
+      inner_radius        = 0.
+      aw                  = 989.6
+      width               = 1.68e-3 2.1e-4 3.15e-4
+      n_radial_elems      = 8 2 2
+      material            = fuel gap ss316
+      geom_type           = RodBundle
+      PoD                 = 1.282
+      aw_duct             = 188.21
+      width_duct          = 1.015E-03
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 61
+      power_fraction = 6.176e-02 0 0
+      axial_power_shape   = power_shape_fn
+    </C>
+    <C name="CH8Gp" type="AnnularPipe">
+      origin    = 0.000 0.315 0.158
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.152
+      n_elems   = 5
+      A         = 8.540e-04
+      Dh        = 2.737e-03
+      roughness = 1.000e-06
+      Nc = 8
+      fric_type             = 1
+      PoD                   = 1.282
+      HoD                   = 26.97
+      cylinder              = true
+      aw                    = 989.6
+      inner_radius          = 1.89e-3
+      width                 = 3.15e-4
+      n_radial_elems        = 2
+      material              = ss316
+      cylinder_second       = false
+      aw_second             = 188.21
+      width_second          = 1.015E-03
+      n_radial_elems_second = 4
+      material_second       = ss316
+    </C>
+    <C name="CH8US" type="DuctCoreChannel">
+      origin    = 0.000 0.315 0.310
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.744
+      n_elems   = 8
+      A         = 4.800e-04
+      Dh        = 3.757e-03
+      roughness = 1.000e-06
+      Nc = 8
+      cylinder            = true
+      aw                  = 727.30
+      inner_radius        = 0.
+      width               = 7.937E-03
+      n_radial_elems      = 8
+      material            = ss316
+      aw_duct             = 334.8
+      width_duct          = 1.015E-03
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+    </C>
+    <C name="CH8B" type="PipeNet">
+      eos      = eos
+      channels = CH8LA CH8LS CH8 CH8Gp CH8US
+    </C>
+    <!--
+    |*************************************************************************************
+    |  DMY: Dummy core steel assembly, n_pin = 7
+    |  Info: Unfueled experiments
+    |*************************************************************************************
+    -->
+    <C name="CH9LA" type="Pipe">
+      origin    = 0.000 0.360 -0.999
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.415
+      n_elems   = 8
+      A         = 1.116e-03
+      Dh        = 3.769e-02
+      roughness = 1.000e-06
+      Nc = 4
+      cylinder       = true
+      width          = 5.740e-3
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH9LS" type="Pipe">
+      origin    = 0.000 0.360 -0.584
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.042
+      n_elems   = 4
+      A         = 2.729e-03
+      Dh        = 5.613e-02
+      roughness = 1.000e-06
+      Nc = 4
+      cylinder       = false
+      aw             = 71.26
+      width          = 1.016E-03
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH9" type="DuctCoreChannel">
+      origin    = 0.000 0.360 -0.542
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 1.527
+      n_elems   = 20
+      A         = 4.274e-04
+      Dh        = 2.653e-03
+      roughness = 1.000e-06
+      Nc = 4
+      cylinder            = true
+      aw                  = 1052.68
+      inner_radius        = 0.
+      width               = 1.023e-2
+      n_radial_elems      = 8
+      material            = ss316
+      aw_duct             = 454.94
+      width_duct          = 1.016e-3
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 70.
+      power_fraction = 6.156e-04
+    </C>
+    <C name="CH9US" type="Pipe">
+      origin    = 0.000 0.360 0.985
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.069
+      n_elems   = 4
+      A         = 2.729e-03
+      Dh        = 5.613e-02
+      roughness = 1.000e-06
+      Nc = 4
+      cylinder       = false
+      aw             = 71.26
+      width          = 1.016E-03
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH9B" type="PipeNet">
+      eos      = eos
+      channels = CH9LA CH9LS CH9 CH9US
+    </C>
+    <!--
+    |*************************************************************************************
+    |  DMY: Dummy core steel assembly, n_pin = 7
+    |  Info: All dummies 1 unfueled experiment
+    |*************************************************************************************
+    -->
+    <C name="CH10LA" type="Pipe">
+      origin    = 0.000 0.405 -0.999
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.415
+      n_elems   = 8
+      A         = 1.116e-03
+      Dh        = 3.769e-02
+      roughness = 1.000e-06
+      Nc = 5
+      cylinder       = true
+      width          = 5.740e-3
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH10LS" type="Pipe">
+      origin    = 0.000 0.405 -0.584
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.042
+      n_elems   = 4
+      A         = 2.729e-03
+      Dh        = 5.613e-02
+      roughness = 1.000e-06
+      Nc = 5
+      cylinder       = false
+      aw             = 71.26
+      width          = 1.016E-03
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH10" type="DuctCoreChannel">
+      origin    = 0.000 0.405 -0.542
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 1.527
+      n_elems   = 20
+      A         = 4.274e-04
+      Dh        = 2.653e-03
+      roughness = 1.000e-06
+      Nc = 5
+      cylinder            = true
+      aw                  = 1052.68
+      inner_radius        = 0.
+      width               = 1.023e-2
+      n_radial_elems      = 8
+      material            = ss316
+      aw_duct             = 454.94
+      width_duct          = 1.016e-3
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 70.
+      power_fraction = 1.644e-03
+    </C>
+    <C name="CH10US" type="Pipe">
+      origin    = 0.000 0.405 0.985
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.069
+      n_elems   = 4
+      A         = 2.729e-03
+      Dh        = 5.613e-02
+      roughness = 1.000e-06
+      Nc = 5
+      cylinder       = false
+      aw             = 71.26
+      width          = 1.016E-03
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH10B" type="PipeNet">
+      eos      = eos
+      channels = CH10LA CH10LS CH10 CH10US
+    </C>
+    <!--
+    |*************************************************************************************
+    |  BLK: Blanket reflector assembly, n_pin = 19
+    |  Info: Highest power-to-flow ratio blanket
+    |*************************************************************************************
+    -->
+    <C name="CH11LA" type="Pipe">
+      origin    = 0.000 0.450 -1.147
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.554
+      n_elems   = 8
+      A         = 2.627e-04
+      Dh        = 1.829e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.000E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH11LS" type="Pipe">
+      origin    = 0.000 0.450 -0.593
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.030
+      n_elems   = 4
+      A         = 2.729e-03
+      Dh        = 5.613e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = false
+      aw             = 71.26
+      width          = 1.016E-03
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH11" type="DuctCoreChannel">
+      origin    = 0.000 0.450 -0.563
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 1.556
+      n_elems   = 20
+      A         = 3.889e-04
+      Dh        = 1.652e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder            = true
+      aw                  = 1921.63
+      inner_radius        = 0.
+      width               = 5.545e-3 2.58e-4 4.57e-4
+      n_radial_elems      = 5 2 2
+      material            = fuel gap ss304
+      aw_duct             = 509.02
+      width_duct          = 1.016e-3
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 19
+      power_fraction = 4.579e-04 0 0
+    </C>
+    <C name="CH11US" type="Pipe">
+      origin    = 0.000 0.450 0.993
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.061
+      n_elems   = 4
+      A         = 2.729e-03
+      Dh        = 5.613e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = false
+      aw             = 71.26
+      width          = 1.016E-03
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH11B" type="PipeNet">
+      eos      = eos
+      channels = CH11LA CH11LS CH11 CH11US
+    </C>
+    <!--
+    |***********************************************************************
+    |  Driver: Driver fuel assembly, n_pin =91
+    |  Info: Row 6 drivers 1 fueled experiment
+    |***********************************************************************
+    -->
+    <C name="CH12LA" type="Pipe">
+      origin    = 0.000 0.495 -0.999
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.415
+      n_elems   = 8
+      A         = 1.116e-03
+      Dh        = 3.769e-02
+      roughness = 1.000e-06
+      Nc = 3
+      cylinder       = true
+      width          = 3.378e-3
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH12LS1" type="Pipe">
+      origin    = 0.000 0.495 -0.584
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 3
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH12LS2" type="AnnularPipe">
+      origin    = 0.000 0.495 -0.399
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.188
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 3
+      cylinder              = true
+      inner_radius          = 0.0
+      width                 = 2.223E-02
+      aw                    = 89.99
+      material              = ss316
+      n_radial_elems        = 4
+      cylinder_second       = false
+      aw_second             = 165.20
+      width_second          = 1.016e-03
+      material_second       = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH12LS3" type="Pipe">
+      origin    = 0.000 0.495 -0.211
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.211
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 3
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH12" type="DuctCoreChannel">
+      origin    = 0.000 0.495 0.000
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.369
+      n_elems   = 12
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 3
+      fric_type           = 1
+      HoD                 = 26.97
+      cylinder            = true
+      inner_radius        = 0.
+      aw                  = 1032.37
+      width               = 1.68e-3 2.1e-4 3.15e-4
+      n_radial_elems      = 8 2 2
+      material            = fuel gap ss316
+      geom_type           = RodBundle
+      PoD                 = 1.333
+      aw_duct             = 162.11
+      width_duct          = 1.016e-3
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 91.
+      power_fraction = 2.902e-02 0 0
+      axial_power_shape   = power_shape_fn
+    </C>
+    <C name="CH12Gp" type="AnnularPipe">
+      origin    = 0.000 0.495 0.369
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.227
+      n_elems   = 5
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 3
+      fric_type             = 1
+      PoD                   = 1.333
+      HoD                   = 26.97
+      cylinder              = true
+      aw                    = 1032.37
+      inner_radius          = 1.89e-3
+      width                 = 3.15e-4
+      n_radial_elems        = 2
+      material              = ss316
+      cylinder_second       = false
+      aw_second             = 162.11
+      width_second          = 1.016e-3
+      n_radial_elems_second = 4
+      material_second       = ss316
+    </C>
+    <C name="CH12US1" type="Pipe">
+      origin    = 0.000 0.495 0.596
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 3
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH12US" type="AnnularPipe">
+      origin    = 0.000 0.495 0.781
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.273
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 3
+      cylinder              = true
+      inner_radius          = 0.0
+      width                 = 2.223E-02
+      aw                    = 89.99
+      material              = ss316
+      n_radial_elems        = 4
+      cylinder_second       = false
+      aw_second             = 165.20
+      width_second          = 1.016e-03
+      material_second       = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH12B" type="PipeNet">
+      eos      = eos
+      channels = CH12LA CH12LS1 CH12LS2 CH12LS3 CH12 CH12Gp CH12US1 CH12US
+    </C>
+    <!--
+    |*************************************************************************************
+    |  ORE: Outer reflector assembly, n_pin = 1
+    |  Info: Row 8 reflectors
+    |*************************************************************************************
+    -->
+    <C name="CH13LA" type="Pipe">
+      origin    = 0.000 0.540 -1.147
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.567
+      n_elems   = 8
+      A         = 2.627e-04
+      Dh        = 1.829e-02
+      roughness = 1.000e-06
+      Nc = 42
+      cylinder       = true
+      width          = 9.136e-03
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH13" type="DuctCoreChannel">
+      origin    = 0.000 0.540 -0.580
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 1.565
+      n_elems   = 20
+      A         = 4.658e-04
+      Dh        = 3.591e-03
+      roughness = 1.000e-06
+      Nc = 42
+      cylinder       = true
+      aw             = 370.90
+      inner_radius   = 0.
+      width          = 2.750E-02
+      n_radial_elems = 8
+      material       = ss316
+      aw_duct             = 424.98
+      width_duct          = 1.016e-3
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 1
+      power_fraction = 4.503e-03
+    </C>
+    <C name="CH13US" type="Pipe">
+      origin    = 0.000 0.540 0.985
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.069
+      n_elems   = 4
+      A         = 2.729e-03
+      Dh        = 5.613e-02
+      roughness = 1.000e-06
+      Nc = 42
+      cylinder  = false
+      aw        = 71.26
+      width     = 1.016E-03
+      material  = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH13B" type="PipeNet">
+      eos      = eos
+      channels = CH13LA CH13 CH13US
+    </C>
+    <!--
+    |*************************************************************************************
+    |  ORE: Outer reflector assembly, n_pin = 1
+    |  Info: Row 9 reflectors
+    |*************************************************************************************
+    -->
+    <C name="CH14LA" type="Pipe">
+      origin    = 0.000 0.585 -1.147
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.567
+      n_elems   = 8
+      A         = 2.627e-04
+      Dh        = 1.829e-02
+      roughness = 1.000e-06
+      Nc = 48
+      cylinder       = true
+      width          = 9.136e-03
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH14" type="DuctCoreChannel">
+      origin    = 0.000 0.585 -0.580
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 1.565
+      n_elems   = 20
+      A         = 4.658e-04
+      Dh        = 3.591e-03
+      roughness = 1.000e-06
+      Nc = 48
+      cylinder       = true
+      aw             = 370.90
+      inner_radius   = 0.
+      width          = 2.750E-02
+      n_radial_elems = 8
+      material       = ss316
+      aw_duct             = 424.98
+      width_duct          = 1.016e-3
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 1
+      power_fraction = 3.322e-03
+    </C>
+    <C name="CH14US" type="Pipe">
+      origin    = 0.000 0.585 0.985
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.069
+      n_elems   = 4
+      A         = 2.729e-03
+      Dh        = 5.613e-02
+      roughness = 1.000e-06
+      Nc = 48
+      cylinder  = false
+      aw        = 71.26
+      width     = 1.016E-03
+      material  = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH14B" type="PipeNet">
+      eos      = eos
+      channels = CH14LA CH14 CH14US
+    </C>
+    <!--
+    |*************************************************************************************
+    |  ORE: Outer reflector assembly, n_pin = 1
+    |  Info: Row 10 reflectors
+    |*************************************************************************************
+    -->
+    <C name="CH15LA" type="Pipe">
+      origin    = 0.000 0.630 -1.147
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.567
+      n_elems   = 8
+      A         = 2.627e-04
+      Dh        = 1.829e-02
+      roughness = 1.000e-06
+      Nc = 54
+      cylinder       = true
+      width          = 9.136e-03
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH15" type="DuctCoreChannel">
+      origin    = 0.000 0.630 -0.580
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 1.565
+      n_elems   = 20
+      A         = 4.658e-04
+      Dh        = 3.591e-03
+      roughness = 1.000e-06
+      Nc = 54
+      cylinder       = true
+      aw             = 370.90
+      inner_radius   = 0.
+      width          = 2.750E-02
+      n_radial_elems = 8
+      material       = ss316
+      aw_duct             = 424.98
+      width_duct          = 1.016e-3
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 1
+      power_fraction = 2.791e-03
+    </C>
+    <C name="CH15US" type="Pipe">
+      origin    = 0.000 0.630 0.985
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.069
+      n_elems   = 4
+      A         = 2.729e-03
+      Dh        = 5.613e-02
+      roughness = 1.000e-06
+      Nc = 54
+      cylinder  = false
+      aw        = 71.26
+      width     = 1.016E-03
+      material  = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH15B" type="PipeNet">
+      eos      = eos
+      channels = CH15LA CH15 CH15US
+    </C>
+    <!--
+    |*************************************************************************************
+    |  ORE: Outer reflector assembly, n_pin = 1
+    |  Info: Rows 12-16 reflectors
+    |*************************************************************************************
+    -->
+    <C name="CH16LA" type="Pipe">
+      origin    = 0.000 0.675 -1.147
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.567
+      n_elems   = 8
+      A         = 2.627e-04
+      Dh        = 1.829e-02
+      roughness = 1.000e-06
+      Nc = 12
+      cylinder       = true
+      width          = 9.136e-03
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH16" type="DuctCoreChannel">
+      origin    = 0.000 0.675 -0.580
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 1.565
+      n_elems   = 20
+      A         = 4.658e-04
+      Dh        = 3.591e-03
+      roughness = 1.000e-06
+      Nc = 12
+      cylinder       = true
+      aw             = 370.90
+      inner_radius   = 0.
+      width          = 2.750E-02
+      n_radial_elems = 8
+      material       = ss316
+      aw_duct             = 424.98
+      width_duct          = 1.016e-3
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 1
+      power_fraction = 1.041e-04
+    </C>
+    <C name="CH16US" type="Pipe">
+      origin    = 0.000 0.675 0.985
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.069
+      n_elems   = 4
+      A         = 2.729e-03
+      Dh        = 5.613e-02
+      roughness = 1.000e-06
+      Nc = 12
+      cylinder  = false
+      aw        = 71.26
+      width     = 1.016E-03
+      material  = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH16B" type="PipeNet">
+      eos      = eos
+      channels = CH16LA CH16 CH16US
+    </C>
+    <!--
+    |*************************************************************************************
+    |  BLK: Blanket reflector assembly, n_pin = 19
+    |  Info: Row 11 high flow blankets
+    |*************************************************************************************
+    -->
+    <C name="CH17LA" type="Pipe">
+      origin    = 0.000 0.720 -1.147
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.554
+      n_elems   = 8
+      A         = 2.627e-04
+      Dh        = 1.829e-02
+      roughness = 1.000e-06
+      Nc = 46
+      cylinder       = true
+      width          = 1.000E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH17LS" type="Pipe">
+      origin    = 0.000 0.720 -0.593
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.030
+      n_elems   = 4
+      A         = 2.729e-03
+      Dh        = 5.613e-02
+      roughness = 1.000e-06
+      Nc = 46
+      cylinder       = false
+      aw             = 71.26
+      width          = 1.016E-03
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH17" type="DuctCoreChannel">
+      origin    = 0.000 0.720 -0.563
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 1.556
+      n_elems   = 20
+      A         = 3.889e-04
+      Dh        = 1.652e-02
+      roughness = 1.000e-06
+      Nc = 46
+      cylinder            = true
+      aw                  = 1921.63
+      inner_radius        = 0.
+      width               = 5.545e-3 2.58e-4 4.57e-4
+      n_radial_elems      = 5 2 2
+      material            = fuel gap ss304
+      aw_duct             = 509.02
+      width_duct          = 1.016e-3
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 19
+      power_fraction = 2.409e-02 0 0
+    </C>
+    <C name="CH17US" type="Pipe">
+      origin    = 0.000 0.720 0.993
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.061
+      n_elems   = 4
+      A         = 2.729e-03
+      Dh        = 5.613e-02
+      roughness = 1.000e-06
+      Nc = 46
+      cylinder       = false
+      aw             = 71.26
+      width          = 1.016E-03
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH17B" type="PipeNet">
+      eos      = eos
+      channels = CH17LA CH17LS CH17 CH17US
+    </C>
+    <!--
+    |*************************************************************************************
+    |  BLK: Blanket reflector assembly, n_pin = 19
+    |  Info: Rows 11-12 high power blankets
+    |*************************************************************************************
+    -->
+    <C name="CH18LA" type="Pipe">
+      origin    = 0.000 0.765 -1.147
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.554
+      n_elems   = 8
+      A         = 2.627e-04
+      Dh        = 1.829e-02
+      roughness = 1.000e-06
+      Nc = 38
+      cylinder       = true
+      width          = 1.000E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH18LS" type="Pipe">
+      origin    = 0.000 0.765 -0.593
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.030
+      n_elems   = 4
+      A         = 2.729e-03
+      Dh        = 5.613e-02
+      roughness = 1.000e-06
+      Nc = 38
+      cylinder       = false
+      aw             = 71.26
+      width          = 1.016E-03
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH18" type="DuctCoreChannel">
+      origin    = 0.000 0.765 -0.563
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 1.556
+      n_elems   = 20
+      A         = 3.889e-04
+      Dh        = 1.652e-02
+      roughness = 1.000e-06
+      Nc = 38
+      cylinder            = true
+      aw                  = 1921.63
+      inner_radius        = 0.
+      width               = 5.545e-3 2.58e-4 4.57e-4
+      n_radial_elems      = 5 2 2
+      material            = fuel gap ss304
+      aw_duct             = 509.02
+      width_duct          = 1.016e-3
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 19
+      power_fraction = 1.485e-02 0 0
+    </C>
+    <C name="CH18US" type="Pipe">
+      origin    = 0.000 0.765 0.993
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.061
+      n_elems   = 4
+      A         = 2.729e-03
+      Dh        = 5.613e-02
+      roughness = 1.000e-06
+      Nc = 38
+      cylinder       = false
+      aw             = 71.26
+      width          = 1.016E-03
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH18B" type="PipeNet">
+      eos      = eos
+      channels = CH18LA CH18LS CH18 CH18US
+    </C>
+    <!--
+    |*************************************************************************************
+    |  BLK: Blanket reflector assembly, n_pin = 19
+    |  Info: Rows 11-16 low power blankets
+    |*************************************************************************************
+    -->
+    <C name="CH19LA" type="Pipe">
+      origin    = 0.000 -0.045 -1.147
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.554
+      n_elems   = 8
+      A         = 2.627e-04
+      Dh        = 1.829e-02
+      roughness = 1.000e-06
+      Nc = 269
+      cylinder       = true
+      width          = 1.000E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH19LS" type="Pipe">
+      origin    = 0.000 -0.045 -0.593
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.030
+      n_elems   = 4
+      A         = 2.729e-03
+      Dh        = 5.613e-02
+      roughness = 1.000e-06
+      Nc = 269
+      cylinder       = false
+      aw             = 71.26
+      width          = 1.016E-03
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH19" type="DuctCoreChannel">
+      origin    = 0.000 -0.045 -0.563
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 1.556
+      n_elems   = 20
+      A         = 3.889e-04
+      Dh        = 1.652e-02
+      roughness = 1.000e-06
+      Nc = 269
+      cylinder            = true
+      aw                  = 1921.63
+      inner_radius        = 0.
+      width               = 5.545e-3 2.58e-4 4.57e-4
+      n_radial_elems      = 5 2 2
+      material            = fuel gap ss304
+      aw_duct             = 509.02
+      width_duct          = 1.016e-3
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 19
+      power_fraction = 4.216e-02 0 0
+    </C>
+    <C name="CH19US" type="Pipe">
+      origin    = 0.000 -0.045 0.993
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.061
+      n_elems   = 4
+      A         = 2.729e-03
+      Dh        = 5.613e-02
+      roughness = 1.000e-06
+      Nc = 269
+      cylinder       = false
+      aw             = 71.26
+      width          = 1.016E-03
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH19B" type="PipeNet">
+      eos      = eos
+      channels = CH19LA CH19LS CH19 CH19US
+    </C>
+    <!--
+    |***********************************************************************
+    |  Driver: Driver fuel assembly, n_pin =91
+    |  Info: Highest power-to-flow ratio driver
+    |***********************************************************************
+    -->
+    <C name="CH20LA" type="Pipe">
+      origin    = 0.000 -0.090 -0.999
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.415
+      n_elems   = 8
+      A         = 1.116e-03
+      Dh        = 3.769e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 3.378e-3
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH20LS1" type="Pipe">
+      origin    = 0.000 -0.090 -0.584
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH20LS2" type="AnnularPipe">
+      origin    = 0.000 -0.090 -0.399
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.188
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder              = true
+      inner_radius          = 0.0
+      width                 = 2.223E-02
+      aw                    = 89.99
+      material              = ss316
+      n_radial_elems        = 4
+      cylinder_second       = false
+      aw_second             = 165.20
+      width_second          = 1.016e-03
+      material_second       = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH20LS3" type="Pipe">
+      origin    = 0.000 -0.090 -0.211
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.211
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH20" type="DuctCoreChannel">
+      origin    = 0.000 -0.090 0.000
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.369
+      n_elems   = 12
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 1
+      fric_type           = 1
+      HoD                 = 26.97
+      cylinder            = true
+      inner_radius        = 0.
+      aw                  = 1032.37
+      width               = 1.68e-3 2.1e-4 3.15e-4
+      n_radial_elems      = 8 2 2
+      material            = fuel gap ss316
+      geom_type           = RodBundle
+      PoD                 = 1.333
+      aw_duct             = 162.11
+      width_duct          = 1.016e-3
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 91.
+      power_fraction = 1.193e-02 0 0
+      axial_power_shape   = power_shape_fn
+    </C>
+    <C name="CH20Gp" type="AnnularPipe">
+      origin    = 0.000 -0.090 0.369
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.227
+      n_elems   = 5
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 1
+      fric_type             = 1
+      PoD                   = 1.333
+      HoD                   = 26.97
+      cylinder              = true
+      aw                    = 1032.37
+      inner_radius          = 1.89e-3
+      width                 = 3.15e-4
+      n_radial_elems        = 2
+      material              = ss316
+      cylinder_second       = false
+      aw_second             = 162.11
+      width_second          = 1.016e-3
+      n_radial_elems_second = 4
+      material_second       = ss316
+    </C>
+    <C name="CH20US1" type="Pipe">
+      origin    = 0.000 -0.090 0.596
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH20US" type="AnnularPipe">
+      origin    = 0.000 -0.090 0.781
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.273
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder              = true
+      inner_radius          = 0.0
+      width                 = 2.223E-02
+      aw                    = 89.99
+      material              = ss316
+      n_radial_elems        = 4
+      cylinder_second       = false
+      aw_second             = 165.20
+      width_second          = 1.016e-03
+      material_second       = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH20B" type="PipeNet">
+      eos      = eos
+      channels = CH20LA CH20LS1 CH20LS2 CH20LS3 CH20 CH20Gp CH20US1 CH20US
+    </C>
+    <!--
+    |*************************************************************************************
+    |  SAF: Safety rod assembly, n_pin = 61
+    |  Info: Row 3 safety rods
+    |*************************************************************************************
+    -->
+    <C name="CH21LA" type="Pipe">
+      origin    = 0.000 -0.135 -0.999
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.424
+      n_elems   = 5
+      A         = 4.169e-04
+      Dh        = 2.304e-02
+      roughness = 1.000e-06
+      Nc = 2
+      cylinder       = true
+      width          = 5.753E-03
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH21LS" type="AnnularPipe">
+      origin    = 0.000 -0.135 -0.575
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.414
+      n_elems   = 5
+      A         = 5.247e-04
+      Dh        = 1.343e-02
+      roughness = 1.000e-06
+      Nc = 2
+      cylinder              = true
+      inner_radius          = 0.0
+      width                 = 4.749E-03
+      aw                    = 56.84
+      material              = ss316
+      n_radial_elems        = 4
+      cylinder_second       = true
+      inner_radius_second   = 4.749e-3
+      aw_second             = 217.8
+      width_second          = 4.026E-03
+      material_second       = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH21" type="DuctCoreChannel">
+      origin    = 0.000 -0.135 -0.161
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.369
+      n_elems   = 12
+      A         = 8.540e-04
+      Dh        = 2.737e-03
+      roughness = 1.000e-06
+      Nc = 2
+      fric_type           = 1
+      HoD                 = 26.97
+      cylinder            = true
+      inner_radius        = 0.
+      aw                  = 989.6
+      width               = 1.68e-3 2.1e-4 3.15e-4
+      n_radial_elems      = 8 2 2
+      material            = fuel gap ss316
+      geom_type           = RodBundle
+      PoD                 = 1.282
+      aw_duct             = 188.21
+      width_duct          = 1.015E-03
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 61
+      power_fraction = 1.933e-02 0 0
+      axial_power_shape   = power_shape_fn
+    </C>
+    <C name="CH21Gp" type="AnnularPipe">
+      origin    = 0.000 -0.135 0.208
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.227
+      n_elems   = 5
+      A         = 8.540e-04
+      Dh        = 2.737e-03
+      roughness = 1.000e-06
+      Nc = 2
+      fric_type             = 1
+      PoD                   = 1.282
+      HoD                   = 26.97
+      cylinder              = true
+      aw                    = 989.6
+      inner_radius          = 1.89e-3
+      width                 = 3.15e-4
+      n_radial_elems        = 2
+      material              = ss316
+      cylinder_second       = false
+      aw_second             = 188.21
+      width_second          = 1.015E-03
+      n_radial_elems_second = 4
+      material_second       = ss316
+    </C>
+    <C name="CH21US" type="Pipe">
+      origin    = 0.000 -0.135 0.435
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.619
+      n_elems   = 5
+      A         = 8.310e-04
+      Dh        = 1.130e-02
+      roughness = 1.000e-06
+      Nc = 2
+      cylinder       = false
+      aw             = 193.5
+      width          = 1.00E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH21B" type="PipeNet">
+      eos      = eos
+      channels = CH21LA CH21LS CH21 CH21Gp CH21US
+    </C>
+    <!--
+    |*************************************************************************************
+    |  X09: XX09 fuel assembly, n_pin = 59
+    |*************************************************************************************
+    -->
+    <C name="CH22LA" type="Pipe">
+      origin    = 0.000 -0.180 -0.999
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.247
+      n_elems   = 5
+      A         = 8.629e-04
+      Dh        = 3.315e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 4.966e-3
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH22LA2" type="Pipe">
+      origin    = 0.000 -0.180 -0.752
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.124
+      n_elems   = 5
+      A         = 1.979e-04
+      Dh        = 1.588e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.360e-2
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH22LS1" type="Pipe">
+      origin    = 0.000 -0.180 -0.628
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.520
+      n_elems   = 5
+      A         = 1.979e-04
+      Dh        = 1.588e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.628E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH22LS2" type="Pipe">
+      origin    = 0.000 -0.180 -0.108
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.108
+      n_elems   = 5
+      A         = 1.864e-03
+      Dh        = 4.640e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = false
+      width          = 1.020E-02
+      aw             = 86.21
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH22" type="DuctCoreChannel">
+      origin    = 0.000 -0.180 0.000
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.369
+      n_elems   = 12
+      A         = 8.543e-04
+      Dh        = 2.739e-03
+      roughness = 1.000e-06
+      Nc = 1
+      fric_type           = 1
+      HoD                 = 26.97
+      cylinder            = true
+      inner_radius        = 0.
+      aw                  = 951.99
+      width               = 1.68e-3 2.1e-4 3.15e-4
+      n_radial_elems      = 8 2 2
+      material            = fuel gap ss316
+      geom_type           = RodBundle
+      PoD                 = 1.282
+      aw_duct             = 187.2
+      width_duct          = 1.018e-3
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 59
+      power_fraction = 8.107e-03 0 0
+      axial_power_shape   = power_shape_fn
+    </C>
+    <C name="CH22Gp" type="AnnularPipe">
+      origin    = 0.000 -0.180 0.369
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.247
+      n_elems   = 5
+      A         = 8.543e-04
+      Dh        = 2.739e-03
+      roughness = 1.000e-06
+      Nc = 1
+      fric_type             = 1
+      PoD                   = 1.282
+      HoD                   = 26.97
+      cylinder              = true
+      aw                    = 1032.37
+      inner_radius          = 1.89e-3
+      width                 = 3.15e-4
+      n_radial_elems        = 2
+      material              = ss316
+      cylinder_second       = false
+      aw_second             = 187.2
+      width_second          = 1.018e-3
+      n_radial_elems_second = 4
+      material_second       = ss316
+    </C>
+    <C name="CH22US1" type="Pipe">
+      origin    = 0.000 -0.180 0.616
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.062
+      n_elems   = 5
+      A         = 1.864e-03
+      Dh        = 4.640e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = false
+      aw             = 86.21
+      width          = 1.018e-3
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH22US" type="Pipe">
+      origin    = 0.000 -0.180 0.678
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.376
+      n_elems   = 5
+      A         = 8.313e-04
+      Dh        = 1.127e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      inner_radius   = 0.0
+      width          = 1.857E-02
+      material       = ss316
+      n_radial_elems = 8
+    </C>
+    <C name="CH22B" type="PipeNet">
+      eos      = eos
+      channels = CH22LA CH22LA2 CH22LS1 CH22LS2 CH22 CH22Gp CH22US1 CH22US
+    </C>
+    <!--
+    |***********************************************************************
+    |  Driver: Driver fuel assembly, n_pin =91
+    |  Info: XX09 neighbor driver
+    |***********************************************************************
+    -->
+    <C name="CH23LA" type="Pipe">
+      origin    = 0.000 -0.225 -0.999
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.415
+      n_elems   = 8
+      A         = 1.116e-03
+      Dh        = 3.769e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 3.378e-3
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH23LS1" type="Pipe">
+      origin    = 0.000 -0.225 -0.584
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH23LS2" type="AnnularPipe">
+      origin    = 0.000 -0.225 -0.399
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.188
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder              = true
+      inner_radius          = 0.0
+      width                 = 2.223E-02
+      aw                    = 89.99
+      material              = ss316
+      n_radial_elems        = 4
+      cylinder_second       = false
+      aw_second             = 165.20
+      width_second          = 1.016e-03
+      material_second       = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH23LS3" type="Pipe">
+      origin    = 0.000 -0.225 -0.211
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.211
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH23" type="DuctCoreChannel">
+      origin    = 0.000 -0.225 0.000
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.369
+      n_elems   = 12
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 1
+      fric_type           = 1
+      HoD                 = 26.97
+      cylinder            = true
+      inner_radius        = 0.
+      aw                  = 1032.37
+      width               = 1.68e-3 2.1e-4 3.15e-4
+      n_radial_elems      = 8 2 2
+      material            = fuel gap ss316
+      geom_type           = RodBundle
+      PoD                 = 1.333
+      aw_duct             = 162.11
+      width_duct          = 1.016e-3
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 91.
+      power_fraction = 1.303e-02 0 0
+      axial_power_shape   = power_shape_fn
+    </C>
+    <C name="CH23Gp" type="AnnularPipe">
+      origin    = 0.000 -0.225 0.369
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.227
+      n_elems   = 5
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 1
+      fric_type             = 1
+      PoD                   = 1.333
+      HoD                   = 26.97
+      cylinder              = true
+      aw                    = 1032.37
+      inner_radius          = 1.89e-3
+      width                 = 3.15e-4
+      n_radial_elems        = 2
+      material              = ss316
+      cylinder_second       = false
+      aw_second             = 162.11
+      width_second          = 1.016e-3
+      n_radial_elems_second = 4
+      material_second       = ss316
+    </C>
+    <C name="CH23US1" type="Pipe">
+      origin    = 0.000 -0.225 0.596
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH23US" type="AnnularPipe">
+      origin    = 0.000 -0.225 0.781
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.273
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder              = true
+      inner_radius          = 0.0
+      width                 = 2.223E-02
+      aw                    = 89.99
+      material              = ss316
+      n_radial_elems        = 4
+      cylinder_second       = false
+      aw_second             = 165.20
+      width_second          = 1.016e-03
+      material_second       = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH23B" type="PipeNet">
+      eos      = eos
+      channels = CH23LA CH23LS1 CH23LS2 CH23LS3 CH23 CH23Gp CH23US1 CH23US
+    </C>
+    <!--
+    |***********************************************************************
+    |  Driver: Driver fuel assembly, n_pin =91
+    |  Info: XX09 neighbor driver
+    |***********************************************************************
+    -->
+    <C name="CH24LA" type="Pipe">
+      origin    = 0.000 -0.270 -0.999
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.415
+      n_elems   = 8
+      A         = 1.116e-03
+      Dh        = 3.769e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 3.378e-3
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH24LS1" type="Pipe">
+      origin    = 0.000 -0.270 -0.584
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH24LS2" type="AnnularPipe">
+      origin    = 0.000 -0.270 -0.399
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.188
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder              = true
+      inner_radius          = 0.0
+      width                 = 2.223E-02
+      aw                    = 89.99
+      material              = ss316
+      n_radial_elems        = 4
+      cylinder_second       = false
+      aw_second             = 165.20
+      width_second          = 1.016e-03
+      material_second       = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH24LS3" type="Pipe">
+      origin    = 0.000 -0.270 -0.211
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.211
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH24" type="DuctCoreChannel">
+      origin    = 0.000 -0.270 0.000
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.369
+      n_elems   = 12
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 1
+      fric_type           = 1
+      HoD                 = 26.97
+      cylinder            = true
+      inner_radius        = 0.
+      aw                  = 1032.37
+      width               = 1.68e-3 2.1e-4 3.15e-4
+      n_radial_elems      = 8 2 2
+      material            = fuel gap ss316
+      geom_type           = RodBundle
+      PoD                 = 1.333
+      aw_duct             = 162.11
+      width_duct          = 1.016e-3
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 91.
+      power_fraction = 1.260e-02 0 0
+      axial_power_shape   = power_shape_fn
+    </C>
+    <C name="CH24Gp" type="AnnularPipe">
+      origin    = 0.000 -0.270 0.369
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.227
+      n_elems   = 5
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 1
+      fric_type             = 1
+      PoD                   = 1.333
+      HoD                   = 26.97
+      cylinder              = true
+      aw                    = 1032.37
+      inner_radius          = 1.89e-3
+      width                 = 3.15e-4
+      n_radial_elems        = 2
+      material              = ss316
+      cylinder_second       = false
+      aw_second             = 162.11
+      width_second          = 1.016e-3
+      n_radial_elems_second = 4
+      material_second       = ss316
+    </C>
+    <C name="CH24US1" type="Pipe">
+      origin    = 0.000 -0.270 0.596
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH24US" type="AnnularPipe">
+      origin    = 0.000 -0.270 0.781
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.273
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder              = true
+      inner_radius          = 0.0
+      width                 = 2.223E-02
+      aw                    = 89.99
+      material              = ss316
+      n_radial_elems        = 4
+      cylinder_second       = false
+      aw_second             = 165.20
+      width_second          = 1.016e-03
+      material_second       = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH24B" type="PipeNet">
+      eos      = eos
+      channels = CH24LA CH24LS1 CH24LS2 CH24LS3 CH24 CH24Gp CH24US1 CH24US
+    </C>
+    <!--
+    |***********************************************************************
+    |  PAD: Partial driver fuel assembly, n_pin = 46
+    |  Info: XX09 neighbor partial driver
+    |***********************************************************************
+    -->
+    <C name="CH25LA" type="Pipe">
+      origin    = 0.000 -0.315 -0.999
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.415
+      n_elems   = 8
+      A         = 1.116e-03
+      Dh        = 3.769e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 3.378e-3
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH25LS1" type="Pipe">
+      origin    = 0.000 -0.315 -0.584
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH25LS2" type="AnnularPipe">
+      origin    = 0.000 -0.315 -0.399
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.188
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      inner_radius   = 0.0
+      width          = 2.223E-02
+      aw             = 89.99
+      material       = ss316
+      n_radial_elems = 4
+      cylinder_second = false
+      aw_second       = 165.20
+      width_second    = 1.016e-03
+      material_second = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH25LS3" type="Pipe">
+      origin    = 0.000 -0.315 -0.211
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.211
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH25" type="DuctCoreChannel">
+      origin    = 0.000 -0.315 0.000
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.369
+      n_elems   = 12
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 1
+      fric_type           = 1
+      HoD                 = 26.97
+      cylinder            = true
+      inner_radius        = 0.
+      aw                  = 521.857
+      width               = 1.68e-3 2.1e-4 3.15e-4
+      n_radial_elems      = 8 2 2
+      material            = fuel gap ss316
+      geom_type           = RodBundle
+      PoD                 = 1.333
+      aw_duct             = 162.11
+      width_duct          = 1.016e-3
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 46
+      power_fraction = 6.201e-03 0 0
+      axial_power_shape   = power_shape_fn
+    </C>
+    <C name="CH25W1" type="ConvectiveHeatTransfer">
+      channel  = CH25
+      wall     = CH25S1:outer
+      reverse  = false
+      n_elems  = 12
+      aw       = 510.513
+    </C>
+    <!-- steel rod in partial driver assembly -->
+    <C name="CH25S1" type="HeatStructure">
+      origin    = 0.000 -0.315 0.
+      direction      = 0. 0. 1.
+      cylinder       = true
+      length         = 0.369
+      inner_radius   = 0.
+      n_elems        = 12
+      width          = 2.205e-3
+      n_radial_elems = 5
+      material       = ss316
+      outer_bc_type  = None
+    </C>
+    <C name="CH25Gp" type="AnnularPipe">
+      origin    = 0.000 -0.315 0.369
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.227
+      n_elems   = 5
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 1
+      fric_type             = 1
+      PoD                   = 1.333
+      HoD                   = 26.97
+      cylinder              = true
+      aw                    = 1032.37
+      inner_radius          = 1.89e-3
+      width                 = 3.15e-4
+      n_radial_elems        = 2
+      material              = ss316
+      cylinder_second       = false
+      aw_second             = 162.11
+      width_second          = 1.016e-3
+      n_radial_elems_second = 4
+      material_second       = ss316
+    </C>
+    <C name="CH25W1Gp" type="ConvectiveHeatTransfer">
+      channel  = CH25Gp
+      wall     = CH25S1Gp:outer
+      reverse  = false
+      n_elems  = 5
+      aw       = 510.513
+    </C>
+    <!-- steel rod in partial driver assembly -->
+    <C name="CH25S1Gp" type="HeatStructure">
+      origin    = 0.000 -0.315 0.369
+      direction      = 0. 0. 1.
+      cylinder       = true
+      length         = 0.227
+      inner_radius   = 0.
+      n_elems        = 5
+      width          = 2.205e-3
+      n_radial_elems = 5
+      material       = ss316
+      outer_bc_type  = None
+    </C>
+    <C name="CH25US1" type="Pipe">
+      origin    = 0.000 -0.315 0.596
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH25US" type="AnnularPipe">
+      origin    = 0.000 -0.315 0.781
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.273
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      inner_radius   = 0.0
+      width          = 2.223E-02
+      aw             = 89.99
+      material       = ss316
+      n_radial_elems = 4
+      cylinder_second = false
+      aw_second       = 165.20
+      width_second    = 1.016e-03
+      material_second = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH25B" type="PipeNet">
+      eos      = eos
+      channels = CH25LA CH25LS1 CH25LS2 CH25LS3 CH25 CH25Gp CH25US1 CH25US
+    </C>
+    <!--
+    |***********************************************************************
+    |  Driver: Driver fuel assembly, n_pin =91
+    |  Info: XX09 neighbor high flow driver
+    |***********************************************************************
+    -->
+    <C name="CH26LA" type="Pipe">
+      origin    = 0.000 -0.360 -0.999
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.415
+      n_elems   = 8
+      A         = 1.116e-03
+      Dh        = 3.769e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 3.378e-3
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH26LS1" type="Pipe">
+      origin    = 0.000 -0.360 -0.584
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH26LS2" type="AnnularPipe">
+      origin    = 0.000 -0.360 -0.399
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.188
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder              = true
+      inner_radius          = 0.0
+      width                 = 2.223E-02
+      aw                    = 89.99
+      material              = ss316
+      n_radial_elems        = 4
+      cylinder_second       = false
+      aw_second             = 165.20
+      width_second          = 1.016e-03
+      material_second       = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH26LS3" type="Pipe">
+      origin    = 0.000 -0.360 -0.211
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.211
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH26" type="DuctCoreChannel">
+      origin    = 0.000 -0.360 0.000
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.369
+      n_elems   = 12
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 1
+      fric_type           = 1
+      HoD                 = 26.97
+      cylinder            = true
+      inner_radius        = 0.
+      aw                  = 1032.37
+      width               = 1.68e-3 2.1e-4 3.15e-4
+      n_radial_elems      = 8 2 2
+      material            = fuel gap ss316
+      geom_type           = RodBundle
+      PoD                 = 1.333
+      aw_duct             = 162.11
+      width_duct          = 1.016e-3
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 91.
+      power_fraction = 1.107e-02 0 0
+      axial_power_shape   = power_shape_fn
+    </C>
+    <C name="CH26Gp" type="AnnularPipe">
+      origin    = 0.000 -0.360 0.369
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.227
+      n_elems   = 5
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 1
+      fric_type             = 1
+      PoD                   = 1.333
+      HoD                   = 26.97
+      cylinder              = true
+      aw                    = 1032.37
+      inner_radius          = 1.89e-3
+      width                 = 3.15e-4
+      n_radial_elems        = 2
+      material              = ss316
+      cylinder_second       = false
+      aw_second             = 162.11
+      width_second          = 1.016e-3
+      n_radial_elems_second = 4
+      material_second       = ss316
+    </C>
+    <C name="CH26US1" type="Pipe">
+      origin    = 0.000 -0.360 0.596
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH26US" type="AnnularPipe">
+      origin    = 0.000 -0.360 0.781
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.273
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder              = true
+      inner_radius          = 0.0
+      width                 = 2.223E-02
+      aw                    = 89.99
+      material              = ss316
+      n_radial_elems        = 4
+      cylinder_second       = false
+      aw_second             = 165.20
+      width_second          = 1.016e-03
+      material_second       = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH26B" type="PipeNet">
+      eos      = eos
+      channels = CH26LA CH26LS1 CH26LS2 CH26LS3 CH26 CH26Gp CH26US1 CH26US
+    </C>
+    <!--
+    |***********************************************************************
+    |  Driver: Driver fuel assembly, n_pin =91
+    |  Info: XX09 neighbor fueled experiment
+    |***********************************************************************
+    -->
+    <C name="CH27LA" type="Pipe">
+      origin    = 0.000 -0.405 -0.999
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.415
+      n_elems   = 8
+      A         = 1.116e-03
+      Dh        = 3.769e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 3.378e-3
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH27LS1" type="Pipe">
+      origin    = 0.000 -0.405 -0.584
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH27LS2" type="AnnularPipe">
+      origin    = 0.000 -0.405 -0.399
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.188
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder              = true
+      inner_radius          = 0.0
+      width                 = 2.223E-02
+      aw                    = 89.99
+      material              = ss316
+      n_radial_elems        = 4
+      cylinder_second       = false
+      aw_second             = 165.20
+      width_second          = 1.016e-03
+      material_second       = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH27LS3" type="Pipe">
+      origin    = 0.000 -0.405 -0.211
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.211
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH27" type="DuctCoreChannel">
+      origin    = 0.000 -0.405 0.000
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.369
+      n_elems   = 12
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 1
+      fric_type           = 1
+      HoD                 = 26.97
+      cylinder            = true
+      inner_radius        = 0.
+      aw                  = 1032.37
+      width               = 1.68e-3 2.1e-4 3.15e-4
+      n_radial_elems      = 8 2 2
+      material            = fuel gap ss316
+      geom_type           = RodBundle
+      PoD                 = 1.333
+      aw_duct             = 162.11
+      width_duct          = 1.016e-3
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 91.
+      power_fraction = 1.126e-02 0 0
+      axial_power_shape   = power_shape_fn
+    </C>
+    <C name="CH27Gp" type="AnnularPipe">
+      origin    = 0.000 -0.405 0.369
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.227
+      n_elems   = 5
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 1
+      fric_type             = 1
+      PoD                   = 1.333
+      HoD                   = 26.97
+      cylinder              = true
+      aw                    = 1032.37
+      inner_radius          = 1.89e-3
+      width                 = 3.15e-4
+      n_radial_elems        = 2
+      material              = ss316
+      cylinder_second       = false
+      aw_second             = 162.11
+      width_second          = 1.016e-3
+      n_radial_elems_second = 4
+      material_second       = ss316
+    </C>
+    <C name="CH27US1" type="Pipe">
+      origin    = 0.000 -0.405 0.596
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH27US" type="AnnularPipe">
+      origin    = 0.000 -0.405 0.781
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.273
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder              = true
+      inner_radius          = 0.0
+      width                 = 2.223E-02
+      aw                    = 89.99
+      material              = ss316
+      n_radial_elems        = 4
+      cylinder_second       = false
+      aw_second             = 165.20
+      width_second          = 1.016e-03
+      material_second       = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH27B" type="PipeNet">
+      eos      = eos
+      channels = CH27LA CH27LS1 CH27LS2 CH27LS3 CH27 CH27Gp CH27US1 CH27US
+    </C>
+    <!--
+    |*************************************************************************************
+    |  DMY: Dummy core steel assembly, n_pin = 7
+    |  Info: XX09 neighbor dummy
+    |*************************************************************************************
+    -->
+    <C name="CH28LA" type="Pipe">
+      origin    = 0.000 -0.450 -0.999
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.415
+      n_elems   = 8
+      A         = 1.116e-03
+      Dh        = 3.769e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 5.740e-3
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH28LS" type="Pipe">
+      origin    = 0.000 -0.450 -0.584
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.042
+      n_elems   = 4
+      A         = 2.729e-03
+      Dh        = 5.613e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = false
+      aw             = 71.26
+      width          = 1.016E-03
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH28" type="DuctCoreChannel">
+      origin    = 0.000 -0.450 -0.542
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 1.527
+      n_elems   = 20
+      A         = 4.274e-04
+      Dh        = 2.653e-03
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder            = true
+      aw                  = 1052.68
+      inner_radius        = 0.
+      width               = 1.023e-2
+      n_radial_elems      = 8
+      material            = ss316
+      aw_duct             = 454.94
+      width_duct          = 1.016e-3
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 70.
+      power_fraction = 3.323e-04
+    </C>
+    <C name="CH28US" type="Pipe">
+      origin    = 0.000 -0.450 0.985
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.069
+      n_elems   = 4
+      A         = 2.729e-03
+      Dh        = 5.613e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = false
+      aw             = 71.26
+      width          = 1.016E-03
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH28B" type="PipeNet">
+      eos      = eos
+      channels = CH28LA CH28LS CH28 CH28US
+    </C>
+    <!--
+    |*************************************************************************************
+    |  X10: XX10 experiment assembly, n_pin = 19
+    |*************************************************************************************
+    -->
+    <C name="CH29LA" type="Pipe">
+      origin    = 0.000 -0.495 -0.999
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.247
+      n_elems   = 5
+      A         = 8.629e-04
+      Dh        = 3.315e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 4.966e-3
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH29LA2" type="Pipe">
+      origin    = 0.000 -0.495 -0.752
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.124
+      n_elems   = 5
+      A         = 1.979e-04
+      Dh        = 1.588e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.360e-2
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH29LS1" type="Pipe">
+      origin    = 0.000 -0.495 -0.628
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.520
+      n_elems   = 5
+      A         = 1.979e-04
+      Dh        = 1.588e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.628E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH29LS2" type="Pipe">
+      origin    = 0.000 -0.495 -0.108
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.108
+      n_elems   = 5
+      A         = 1.864e-03
+      Dh        = 4.640e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = false
+      width          = 1.020E-02
+      aw             = 86.21
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH29" type="DuctCoreChannel">
+      origin    = 0.000 -0.495 0.000
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.616
+      n_elems   = 20
+      A         = 6.824e-04
+      Dh        = 3.587e-03
+      roughness = 1.000e-06
+      Nc = 1
+      fric_type           = 1
+      HoD                 = 15.15
+      cylinder            = true
+      inner_radius        = 0.
+      aw                  = 770.88
+      width               = 4.406e-3
+      n_radial_elems      = 8
+      material            = ss316
+      geom_type           = RodBundle
+      PoD                 = 1.141
+      aw_duct             = 235.54
+      width_duct          = 1.018e-3
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 19.0
+      power_fraction = 3.013e-04
+    </C>
+    <C name="CH29US1" type="Pipe">
+      origin    = 0.000 -0.495 0.616
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.062
+      n_elems   = 5
+      A         = 1.864e-03
+      Dh        = 4.640e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = false
+      aw             = 86.21
+      width          = 1.018e-3
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH29US" type="Pipe">
+      origin    = 0.000 -0.495 0.678
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.376
+      n_elems   = 5
+      A         = 8.313e-04
+      Dh        = 1.127e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      inner_radius   = 0.0
+      width          = 1.857E-02
+      material       = ss316
+      n_radial_elems = 8
+    </C>
+    <C name="CH29B" type="PipeNet">
+      eos      = eos
+      channels = CH29LA CH29LA2 CH29LS1 CH29LS2 CH29 CH29US1 CH29US
+    </C>
+    <!--
+    |***********************************************************************
+    |  PAD: Partial driver fuel assembly, n_pin = 46
+    |  Info: XX10 neighbor partial driver
+    |***********************************************************************
+    -->
+    <C name="CH30LA" type="Pipe">
+      origin    = 0.000 -0.540 -0.999
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.415
+      n_elems   = 8
+      A         = 1.116e-03
+      Dh        = 3.769e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 3.378e-3
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH30LS1" type="Pipe">
+      origin    = 0.000 -0.540 -0.584
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH30LS2" type="AnnularPipe">
+      origin    = 0.000 -0.540 -0.399
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.188
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      inner_radius   = 0.0
+      width          = 2.223E-02
+      aw             = 89.99
+      material       = ss316
+      n_radial_elems = 4
+      cylinder_second = false
+      aw_second       = 165.20
+      width_second    = 1.016e-03
+      material_second = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH30LS3" type="Pipe">
+      origin    = 0.000 -0.540 -0.211
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.211
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH30" type="DuctCoreChannel">
+      origin    = 0.000 -0.540 0.000
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.369
+      n_elems   = 12
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 1
+      fric_type           = 1
+      HoD                 = 26.97
+      cylinder            = true
+      inner_radius        = 0.
+      aw                  = 521.857
+      width               = 1.68e-3 2.1e-4 3.15e-4
+      n_radial_elems      = 8 2 2
+      material            = fuel gap ss316
+      geom_type           = RodBundle
+      PoD                 = 1.333
+      aw_duct             = 162.11
+      width_duct          = 1.016e-3
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 46
+      power_fraction = 6.151e-03 0 0
+      axial_power_shape   = power_shape_fn
+    </C>
+    <C name="CH30W1" type="ConvectiveHeatTransfer">
+      channel  = CH30
+      wall     = CH30S1:outer
+      reverse  = false
+      n_elems  = 12
+      aw       = 510.513
+    </C>
+    <!-- steel rod in partial driver assembly -->
+    <C name="CH30S1" type="HeatStructure">
+      origin    = 0.000 -0.540 0.
+      direction      = 0. 0. 1.
+      cylinder       = true
+      length         = 0.369
+      inner_radius   = 0.
+      n_elems        = 12
+      width          = 2.205e-3
+      n_radial_elems = 5
+      material       = ss316
+      outer_bc_type  = None
+    </C>
+    <C name="CH30Gp" type="AnnularPipe">
+      origin    = 0.000 -0.540 0.369
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.227
+      n_elems   = 5
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 1
+      fric_type             = 1
+      PoD                   = 1.333
+      HoD                   = 26.97
+      cylinder              = true
+      aw                    = 1032.37
+      inner_radius          = 1.89e-3
+      width                 = 3.15e-4
+      n_radial_elems        = 2
+      material              = ss316
+      cylinder_second       = false
+      aw_second             = 162.11
+      width_second          = 1.016e-3
+      n_radial_elems_second = 4
+      material_second       = ss316
+    </C>
+    <C name="CH30W1Gp" type="ConvectiveHeatTransfer">
+      channel  = CH30Gp
+      wall     = CH30S1Gp:outer
+      reverse  = false
+      n_elems  = 5
+      aw       = 510.513
+    </C>
+    <!-- steel rod in partial driver assembly -->
+    <C name="CH30S1Gp" type="HeatStructure">
+      origin    = 0.000 -0.540 0.369
+      direction      = 0. 0. 1.
+      cylinder       = true
+      length         = 0.227
+      inner_radius   = 0.
+      n_elems        = 5
+      width          = 2.205e-3
+      n_radial_elems = 5
+      material       = ss316
+      outer_bc_type  = None
+    </C>
+    <C name="CH30US1" type="Pipe">
+      origin    = 0.000 -0.540 0.596
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH30US" type="AnnularPipe">
+      origin    = 0.000 -0.540 0.781
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.273
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      inner_radius   = 0.0
+      width          = 2.223E-02
+      aw             = 89.99
+      material       = ss316
+      n_radial_elems = 4
+      cylinder_second = false
+      aw_second       = 165.20
+      width_second    = 1.016e-03
+      material_second = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH30B" type="PipeNet">
+      eos      = eos
+      channels = CH30LA CH30LS1 CH30LS2 CH30LS3 CH30 CH30Gp CH30US1 CH30US
+    </C>
+    <!--
+    |***********************************************************************
+    |  Driver: Driver fuel assembly, n_pin =91
+    |  Info: XX10 neighbor high flow driver
+    |***********************************************************************
+    -->
+    <C name="CH31LA" type="Pipe">
+      origin    = 0.000 -0.585 -0.999
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.415
+      n_elems   = 8
+      A         = 1.116e-03
+      Dh        = 3.769e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 3.378e-3
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH31LS1" type="Pipe">
+      origin    = 0.000 -0.585 -0.584
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH31LS2" type="AnnularPipe">
+      origin    = 0.000 -0.585 -0.399
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.188
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder              = true
+      inner_radius          = 0.0
+      width                 = 2.223E-02
+      aw                    = 89.99
+      material              = ss316
+      n_radial_elems        = 4
+      cylinder_second       = false
+      aw_second             = 165.20
+      width_second          = 1.016e-03
+      material_second       = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH31LS3" type="Pipe">
+      origin    = 0.000 -0.585 -0.211
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.211
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH31" type="DuctCoreChannel">
+      origin    = 0.000 -0.585 0.000
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.369
+      n_elems   = 12
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 1
+      fric_type           = 1
+      HoD                 = 26.97
+      cylinder            = true
+      inner_radius        = 0.
+      aw                  = 1032.37
+      width               = 1.68e-3 2.1e-4 3.15e-4
+      n_radial_elems      = 8 2 2
+      material            = fuel gap ss316
+      geom_type           = RodBundle
+      PoD                 = 1.333
+      aw_duct             = 162.11
+      width_duct          = 1.016e-3
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 91.
+      power_fraction = 1.036e-02 0 0
+      axial_power_shape   = power_shape_fn
+    </C>
+    <C name="CH31Gp" type="AnnularPipe">
+      origin    = 0.000 -0.585 0.369
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.227
+      n_elems   = 5
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 1
+      fric_type             = 1
+      PoD                   = 1.333
+      HoD                   = 26.97
+      cylinder              = true
+      aw                    = 1032.37
+      inner_radius          = 1.89e-3
+      width                 = 3.15e-4
+      n_radial_elems        = 2
+      material              = ss316
+      cylinder_second       = false
+      aw_second             = 162.11
+      width_second          = 1.016e-3
+      n_radial_elems_second = 4
+      material_second       = ss316
+    </C>
+    <C name="CH31US1" type="Pipe">
+      origin    = 0.000 -0.585 0.596
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH31US" type="AnnularPipe">
+      origin    = 0.000 -0.585 0.781
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.273
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder              = true
+      inner_radius          = 0.0
+      width                 = 2.223E-02
+      aw                    = 89.99
+      material              = ss316
+      n_radial_elems        = 4
+      cylinder_second       = false
+      aw_second             = 165.20
+      width_second          = 1.016e-03
+      material_second       = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH31B" type="PipeNet">
+      eos      = eos
+      channels = CH31LA CH31LS1 CH31LS2 CH31LS3 CH31 CH31Gp CH31US1 CH31US
+    </C>
+    <!--
+    |***********************************************************************
+    |  Driver: Driver fuel assembly, n_pin =91
+    |  Info: XX10 neighbor driver
+    |***********************************************************************
+    -->
+    <C name="CH32LA" type="Pipe">
+      origin    = 0.000 -0.630 -0.999
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.415
+      n_elems   = 8
+      A         = 1.116e-03
+      Dh        = 3.769e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 3.378e-3
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH32LS1" type="Pipe">
+      origin    = 0.000 -0.630 -0.584
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH32LS2" type="AnnularPipe">
+      origin    = 0.000 -0.630 -0.399
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.188
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder              = true
+      inner_radius          = 0.0
+      width                 = 2.223E-02
+      aw                    = 89.99
+      material              = ss316
+      n_radial_elems        = 4
+      cylinder_second       = false
+      aw_second             = 165.20
+      width_second          = 1.016e-03
+      material_second       = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH32LS3" type="Pipe">
+      origin    = 0.000 -0.630 -0.211
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.211
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH32" type="DuctCoreChannel">
+      origin    = 0.000 -0.630 0.000
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.369
+      n_elems   = 12
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 1
+      fric_type           = 1
+      HoD                 = 26.97
+      cylinder            = true
+      inner_radius        = 0.
+      aw                  = 1032.37
+      width               = 1.68e-3 2.1e-4 3.15e-4
+      n_radial_elems      = 8 2 2
+      material            = fuel gap ss316
+      geom_type           = RodBundle
+      PoD                 = 1.333
+      aw_duct             = 162.11
+      width_duct          = 1.016e-3
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 91.
+      power_fraction = 9.328e-03 0 0
+      axial_power_shape   = power_shape_fn
+    </C>
+    <C name="CH32Gp" type="AnnularPipe">
+      origin    = 0.000 -0.630 0.369
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.227
+      n_elems   = 5
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 1
+      fric_type             = 1
+      PoD                   = 1.333
+      HoD                   = 26.97
+      cylinder              = true
+      aw                    = 1032.37
+      inner_radius          = 1.89e-3
+      width                 = 3.15e-4
+      n_radial_elems        = 2
+      material              = ss316
+      cylinder_second       = false
+      aw_second             = 162.11
+      width_second          = 1.016e-3
+      n_radial_elems_second = 4
+      material_second       = ss316
+    </C>
+    <C name="CH32US1" type="Pipe">
+      origin    = 0.000 -0.630 0.596
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH32US" type="AnnularPipe">
+      origin    = 0.000 -0.630 0.781
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.273
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder              = true
+      inner_radius          = 0.0
+      width                 = 2.223E-02
+      aw                    = 89.99
+      material              = ss316
+      n_radial_elems        = 4
+      cylinder_second       = false
+      aw_second             = 165.20
+      width_second          = 1.016e-03
+      material_second       = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH32B" type="PipeNet">
+      eos      = eos
+      channels = CH32LA CH32LS1 CH32LS2 CH32LS3 CH32 CH32Gp CH32US1 CH32US
+    </C>
+    <!--
+    |***********************************************************************
+    |  Driver: Driver fuel assembly, n_pin =91
+    |  Info: XX10 neighbor high flow driver
+    |***********************************************************************
+    -->
+    <C name="CH33LA" type="Pipe">
+      origin    = 0.000 -0.675 -0.999
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.415
+      n_elems   = 8
+      A         = 1.116e-03
+      Dh        = 3.769e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 3.378e-3
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH33LS1" type="Pipe">
+      origin    = 0.000 -0.675 -0.584
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH33LS2" type="AnnularPipe">
+      origin    = 0.000 -0.675 -0.399
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.188
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder              = true
+      inner_radius          = 0.0
+      width                 = 2.223E-02
+      aw                    = 89.99
+      material              = ss316
+      n_radial_elems        = 4
+      cylinder_second       = false
+      aw_second             = 165.20
+      width_second          = 1.016e-03
+      material_second       = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH33LS3" type="Pipe">
+      origin    = 0.000 -0.675 -0.211
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.211
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH33" type="DuctCoreChannel">
+      origin    = 0.000 -0.675 0.000
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.369
+      n_elems   = 12
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 1
+      fric_type           = 1
+      HoD                 = 26.97
+      cylinder            = true
+      inner_radius        = 0.
+      aw                  = 1032.37
+      width               = 1.68e-3 2.1e-4 3.15e-4
+      n_radial_elems      = 8 2 2
+      material            = fuel gap ss316
+      geom_type           = RodBundle
+      PoD                 = 1.333
+      aw_duct             = 162.11
+      width_duct          = 1.016e-3
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 91.
+      power_fraction = 1.074e-02 0 0
+      axial_power_shape   = power_shape_fn
+    </C>
+    <C name="CH33Gp" type="AnnularPipe">
+      origin    = 0.000 -0.675 0.369
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.227
+      n_elems   = 5
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 1
+      fric_type             = 1
+      PoD                   = 1.333
+      HoD                   = 26.97
+      cylinder              = true
+      aw                    = 1032.37
+      inner_radius          = 1.89e-3
+      width                 = 3.15e-4
+      n_radial_elems        = 2
+      material              = ss316
+      cylinder_second       = false
+      aw_second             = 162.11
+      width_second          = 1.016e-3
+      n_radial_elems_second = 4
+      material_second       = ss316
+    </C>
+    <C name="CH33US1" type="Pipe">
+      origin    = 0.000 -0.675 0.596
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH33US" type="AnnularPipe">
+      origin    = 0.000 -0.675 0.781
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.273
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder              = true
+      inner_radius          = 0.0
+      width                 = 2.223E-02
+      aw                    = 89.99
+      material              = ss316
+      n_radial_elems        = 4
+      cylinder_second       = false
+      aw_second             = 165.20
+      width_second          = 1.016e-03
+      material_second       = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH33B" type="PipeNet">
+      eos      = eos
+      channels = CH33LA CH33LS1 CH33LS2 CH33LS3 CH33 CH33Gp CH33US1 CH33US
+    </C>
+    <!--
+    |***********************************************************************
+    |  Driver: Driver fuel assembly, n_pin =91
+    |  Info: XX10 neighbor driver
+    |***********************************************************************
+    -->
+    <C name="CH34LA" type="Pipe">
+      origin    = 0.000 -0.720 -0.999
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.415
+      n_elems   = 8
+      A         = 1.116e-03
+      Dh        = 3.769e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 3.378e-3
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH34LS1" type="Pipe">
+      origin    = 0.000 -0.720 -0.584
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH34LS2" type="AnnularPipe">
+      origin    = 0.000 -0.720 -0.399
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.188
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder              = true
+      inner_radius          = 0.0
+      width                 = 2.223E-02
+      aw                    = 89.99
+      material              = ss316
+      n_radial_elems        = 4
+      cylinder_second       = false
+      aw_second             = 165.20
+      width_second          = 1.016e-03
+      material_second       = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH34LS3" type="Pipe">
+      origin    = 0.000 -0.720 -0.211
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.211
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH34" type="DuctCoreChannel">
+      origin    = 0.000 -0.720 0.000
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.369
+      n_elems   = 12
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 1
+      fric_type           = 1
+      HoD                 = 26.97
+      cylinder            = true
+      inner_radius        = 0.
+      aw                  = 1032.37
+      width               = 1.68e-3 2.1e-4 3.15e-4
+      n_radial_elems      = 8 2 2
+      material            = fuel gap ss316
+      geom_type           = RodBundle
+      PoD                 = 1.333
+      aw_duct             = 162.11
+      width_duct          = 1.016e-3
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 91.
+      power_fraction = 1.139e-02 0 0
+      axial_power_shape   = power_shape_fn
+    </C>
+    <C name="CH34Gp" type="AnnularPipe">
+      origin    = 0.000 -0.720 0.369
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.227
+      n_elems   = 5
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 1
+      fric_type             = 1
+      PoD                   = 1.333
+      HoD                   = 26.97
+      cylinder              = true
+      aw                    = 1032.37
+      inner_radius          = 1.89e-3
+      width                 = 3.15e-4
+      n_radial_elems        = 2
+      material              = ss316
+      cylinder_second       = false
+      aw_second             = 162.11
+      width_second          = 1.016e-3
+      n_radial_elems_second = 4
+      material_second       = ss316
+    </C>
+    <C name="CH34US1" type="Pipe">
+      origin    = 0.000 -0.720 0.596
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH34US" type="AnnularPipe">
+      origin    = 0.000 -0.720 0.781
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.273
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder              = true
+      inner_radius          = 0.0
+      width                 = 2.223E-02
+      aw                    = 89.99
+      material              = ss316
+      n_radial_elems        = 4
+      cylinder_second       = false
+      aw_second             = 165.20
+      width_second          = 1.016e-03
+      material_second       = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH34B" type="PipeNet">
+      eos      = eos
+      channels = CH34LA CH34LS1 CH34LS2 CH34LS3 CH34 CH34Gp CH34US1 CH34US
+    </C>
+    <!--
+    |***********************************************************************
+    |  Driver: Driver fuel assembly, n_pin =91
+    |  Info: XX10 neighbor fueled experiment
+    |***********************************************************************
+    -->
+    <C name="CH35LA" type="Pipe">
+      origin    = 0.000 -0.765 -0.999
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.415
+      n_elems   = 8
+      A         = 1.116e-03
+      Dh        = 3.769e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 3.378e-3
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH35LS1" type="Pipe">
+      origin    = 0.000 -0.765 -0.584
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH35LS2" type="AnnularPipe">
+      origin    = 0.000 -0.765 -0.399
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.188
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder              = true
+      inner_radius          = 0.0
+      width                 = 2.223E-02
+      aw                    = 89.99
+      material              = ss316
+      n_radial_elems        = 4
+      cylinder_second       = false
+      aw_second             = 165.20
+      width_second          = 1.016e-03
+      material_second       = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH35LS3" type="Pipe">
+      origin    = 0.000 -0.765 -0.211
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.211
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH35" type="DuctCoreChannel">
+      origin    = 0.000 -0.765 0.000
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.369
+      n_elems   = 12
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 1
+      fric_type           = 1
+      HoD                 = 26.97
+      cylinder            = true
+      inner_radius        = 0.
+      aw                  = 1032.37
+      width               = 1.68e-3 2.1e-4 3.15e-4
+      n_radial_elems      = 8 2 2
+      material            = fuel gap ss316
+      geom_type           = RodBundle
+      PoD                 = 1.333
+      aw_duct             = 162.11
+      width_duct          = 1.016e-3
+      n_radial_elems_duct = 4
+      material_duct       = ss316
+      reactor             = rp
+      n_rods              = 91.
+      power_fraction = 1.260e-02 0 0
+      axial_power_shape   = power_shape_fn
+    </C>
+    <C name="CH35Gp" type="AnnularPipe">
+      origin    = 0.000 -0.765 0.369
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.227
+      n_elems   = 5
+      A         = 1.221e-03
+      Dh        = 2.689e-03
+      roughness = 1.000e-06
+      Nc = 1
+      fric_type             = 1
+      PoD                   = 1.333
+      HoD                   = 26.97
+      cylinder              = true
+      aw                    = 1032.37
+      inner_radius          = 1.89e-3
+      width                 = 3.15e-4
+      n_radial_elems        = 2
+      material              = ss316
+      cylinder_second       = false
+      aw_second             = 162.11
+      width_second          = 1.016e-3
+      n_radial_elems_second = 4
+      material_second       = ss316
+    </C>
+    <C name="CH35US1" type="Pipe">
+      origin    = 0.000 -0.765 0.596
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.185
+      n_elems   = 5
+      A         = 9.580e-04
+      Dh        = 3.493e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder       = true
+      width          = 1.162E-02
+      material       = ss316
+      n_radial_elems = 4
+    </C>
+    <C name="CH35US" type="AnnularPipe">
+      origin    = 0.000 -0.765 0.781
+      direction = 0.000 0.000 1.000
+      eos       = eos
+      length    = 0.273
+      n_elems   = 5
+      A         = 1.177e-03
+      Dh        = 1.409e-02
+      roughness = 1.000e-06
+      Nc = 1
+      cylinder              = true
+      inner_radius          = 0.0
+      width                 = 2.223E-02
+      aw                    = 89.99
+      material              = ss316
+      n_radial_elems        = 4
+      cylinder_second       = false
+      aw_second             = 165.20
+      width_second          = 1.016e-03
+      material_second       = ss316
+      n_radial_elems_second = 4
+    </C>
+    <C name="CH35B" type="PipeNet">
+      eos      = eos
+      channels = CH35LA CH35LS1 CH35LS2 CH35LS3 CH35 CH35Gp CH35US1 CH35US
+    </C>
+    <!--
+    |***********************************************************************
+    |  0-D Compressible volumes
+    |***********************************************************************
+    -->
+    <!-- High-Pressure Inlet Plenum -->
+    <C name="CV1" type="VolumeBranch">
+      eos        = eos
+      connection = E16:outlet E27:outlet E36:inlet E3:inlet CH1LA:inlet CH2LA:inlet CH3LA:inlet CH4LA:inlet CH5LA:inlet CH6LA:inlet CH7LA:inlet CH8LA:inlet CH9LA:inlet CH10LA:inlet CH12LA:inlet CH20LA:inlet CH21LA:inlet CH22LA:inlet CH23LA:inlet CH24LA:inlet CH25LA:inlet CH26LA:inlet CH27LA:inlet CH28LA:inlet CH29LA:inlet CH30LA:inlet CH31LA:inlet CH32LA:inlet CH33LA:inlet CH34LA:inlet CH35LA:inlet
+      K = 0.0 0.0 545.0 2654.45 1.72 4.27 11.61 17.19 23.67 5074.51 47.35 2.30 1221.97 793.13 29.23 23.74 1.11 19.66 11.27 11.26 37.62 23.71 23.71 801.15 1886.27 41.57 23.68 29.23 23.69 17.18 11.26
+      volume     = 0.72
+      center     = 0. 0. -0.862
+      width      = 2.230
+      height     = 0.274
+    </C>
+    <!-- Core bypass pipe -->
+    <C name="E3" type="OneDFluidComponent">
+      origin    = 0. 1.0 -0.999
+      direction = 0. 0. 1.
+      eos       = eos
+      n_elems   = 8
+      length    = 2.053
+      A         = 0.01
+      Dh        = 0.01
+      roughness = 1.0e-6
+    </C>
+    <!-- Low-Pressure Inlet Plenum -->
+    <C name="CV2" type="VolumeBranch">
+      eos        = eos
+      connection = E21:outlet E32:outlet CH11LA:inlet CH13LA:inlet CH14LA:inlet CH15LA:inlet CH16LA:inlet CH17LA:inlet CH18LA:inlet CH19LA:inlet
+      K = 0.0 0.0 1043.05 2132.13 10928.90 16678.92 1052.95 315.77 1043.18 1057.68
+      volume     = 1.13
+      center     = 0. 0. -1.3285
+      width      = 2.230
+      height     = 0.445
+    </C>
+    <!-- Outlet Plenum -->
+    <C name="CV3" type="VolumeBranch">
+      eos        = eos
+      connection = E4:inlet E35:inlet E3:outlet CH1US:outlet CH2US:outlet CH3US:outlet CH4US:outlet CH5US:outlet CH6US:outlet CH7US:outlet CH8US:outlet CH9US:outlet CH10US:outlet CH11US:outlet CH12US:outlet CH13US:outlet CH14US:outlet CH15US:outlet CH16US:outlet CH17US:outlet CH18US:outlet CH19US:outlet CH20US:outlet CH21US:outlet CH22US:outlet CH23US:outlet CH24US:outlet CH25US:outlet CH26US:outlet CH27US:outlet CH28US:outlet CH29US:outlet CH30US:outlet CH31US:outlet CH32US:outlet CH33US:outlet CH34US:outlet CH35US:outlet
+      K = 1.64 350.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
+      volume     = 2.67
+      center     = 0. 0. 1.3545
+      width      = 2.312
+      height     = 0.601
+    </C>
+    <!-- Cold Pool -->
+    <C name="CV4" type="VolumeBranch">
+      eos        = eos
+      connection = E10:outlet E33:outlet E34:outlet E35:outlet E36:outlet E37:inlet E11:inlet E22:inlet
+      K = 1.0 1.0 1.0 1.0 1.0 0.0 6.6 1.5
+      volume     = 330.2
+      center     = 0. 0. 1.833
+      width      = 12.0
+      height     = 7.988
+    </C>
+    <!-- Pump #1: Tee junction -->
+    <C name="CV5" type="VolumeBranch">
+      eos        = eos
+      connection = E13:outlet E14:inlet E17:inlet E33:inlet
+      K = 0.4 0.4 0.4 1330.0
+      volume     = 0.01
+      center     = 0. -5.014 1.198
+      width      = 0.2
+      height     = 0.168
+    </C>
+    <!-- Pump #2: Tee junction -->
+    <C name="CV6" type="VolumeBranch">
+      eos        = eos
+      connection = E24:outlet E25:inlet E28:inlet E34:inlet
+      K = 0.4 0.4 0.4 1330.0
+      volume     = 0.01
+      center     = 0. 5.014 1.198
+      width      = 0.2
+      height     = 0.168
+    </C>
+    <!-- Pump #1 and Throttle valve leakage -->
+    <C name="E33" type="OneDFluidComponent">
+      origin    = 0.  -5.114 1.114
+      direction = 0.  -1. 0.
+      eos       = eos
+      n_elems   = 5
+      length    = 0.05
+      A         = 1.0e-3
+      Dh        = 0.01
+      roughness = 3.2e-5
+    </C>
+    <!-- Pump #1 and Throttle valve leakage -->
+    <C name="E34" type="OneDFluidComponent">
+      origin    = 0. 5.114 1.114
+      direction = 0. 1. 0.
+      eos       = eos
+      n_elems   = 5
+      length    = 0.05
+      A         = 1.0e-3
+      Dh        = 0.01
+      roughness = 3.2e-5
+    </C>
+    <!-- Outlet plenum and IHS to cold pool leak -->
+    <C name="E35" type="OneDFluidComponent">
+      origin    = 0. 0. 1.654
+      direction = 0. 0. 1.
+      eos       = eos
+      n_elems   = 8
+      length    = 0.876
+      A         = 0.01
+      Dh        = 0.01
+      roughness = 1.0e-6
+    </C>
+    <!-- Core adaptor leakage -->
+    <C name="E36" type="OneDFluidComponent">
+      origin    = 0. 1.115 -0.999
+      direction = 0. 1. 0.
+      eos       = eos
+      n_elems   = 5
+      length    = 0.05
+      A         = 0.01
+      Dh        = 0.01
+      roughness = 1.0e-6
+    </C>
+    <!-- Cold pool top pressure boundary -->
+    <C name="E37" type="OneDFluidComponent">
+      origin    = 0. 0. 5.827
+      direction = 0. 0. 1.
+      eos       = eos
+      n_elems   = 4
+      length    = 0.173
+      A         = 1.0e-3
+      Dh        = 0.10
+    </C>
+    <!-- Primary system pressure boundary -->
+    <C name="E37Out" type="TDV">
+      eos        = eos
+      connection = E37:outlet
+      p_bc       = 2.0e5
+      T_bc       = 740.0
+    </C>
+    <!--
+    |***********************************************************************
+    |  Z-Pipe Network
+    |***********************************************************************
+    -->
+    <!-- Z-Pipe inlet -->
+    <C name="E4" type="Pipe">
+      origin         = 0. 1.156 1.182
+      direction      = 0. 1. 0.
+      eos            = eos
+      n_elems        = 8
+      length         = 3.107
+      A              = 0.0923
+      Dh             = 0.343
+      roughness      = 3.2e-5
+      inner_radius   = 0.1715
+      width          = 0.00635 0.04445 0.00635
+      n_radial_elems = 4 8 4
+      material       = ss316 gap ss316
+      outer_bc_type  = None
+    </C>
+    <C name="E4ToColdPool" type="ConvectiveHeatTransfer">
+      channel  = CV4
+      wall     = E4:wall:outer
+      reverse  = false
+      n_elems  = 8
+      aw       = 6.759e-3
+      htc_type = 14
+      Ln       = 3.107
+    </C>
+    <C name="BZ1" type="Branch">
+      eos        = eos
+      connection = E4:outlet E5:inlet
+    </C>
+    <!-- Z-Pipe: angled portion -->
+    <C name="E5" type="Pipe">
+      origin         = 0.  4.263 1.182
+      direction      = 0. -3.66707663 3.757
+      eos            = eos
+      n_elems        = 8
+      length         = 5.250
+      A              = 0.0923
+      Dh             = 0.343
+      roughness      = 3.2e-5
+      inner_radius   = 0.1715
+      width          = 0.00635 0.04445 0.00635
+      n_radial_elems = 4 8 4
+      material       = ss316 gap ss316
+      outer_bc_type  = None
+    </C>
+    <C name="E5ToColdPool" type="ConvectiveHeatTransfer">
+      channel  = CV4
+      wall     = E5:wall:outer
+      reverse  = false
+      n_elems  = 8
+      aw       = 1.142e-2
+      htc_type = 14
+      Ln       = 5.250
+    </C>
+    <C name="BZ2" type="Branch">
+      eos        = eos
+      connection = E5:outlet E6:inlet
+    </C>
+    <!-- Z-Pipe: EMPump Inlet -->
+    <C name="E6" type="Pipe">
+      origin         = 0. 0.5959 4.939
+      direction      = 0. 1. 0.
+      eos            = eos
+      n_elems        = 8
+      length         = 1.318
+      A              = 0.0923
+      Dh             = 0.343
+      roughness      = 3.2e-5
+      inner_radius   = 0.1715
+      width          = 0.00635 0.04445 0.00635
+      n_radial_elems = 4 8 4
+      material       = ss316 gap ss316
+      outer_bc_type  = None
+    </C>
+    <C name="E6ToColdPool" type="ConvectiveHeatTransfer">
+      channel  = CV4
+      wall     = E6:wall:outer
+      reverse  = false
+      n_elems  = 8
+      aw       = 2.8672e-3
+      htc_type = 14
+      Ln       = 1.318
+    </C>
+    <!-- Z-Pipe: EMPump -->
+    <C name="E7" type="Pump">
+      eos        = eos
+      connection = E6:outlet E8:inlet
+      head       = 0.0
+      volume     = 0.023444
+      center     = 0. 1.9139 4.939
+      width      = 0.2
+      height     = 0.2
+      K = 0.35 0.0
+    </C>
+    <!-- Z-Pipe: outlet -->
+    <C name="E8" type="Pipe">
+      origin         = 0. 1.9139 4.939
+      direction      = 0. 1. 0.
+      eos            = eos
+      n_elems        = 8
+      length         = 2.364
+      A              = 0.0923
+      Dh             = 0.343
+      inner_radius   = 0.1715
+      width          = 0.00635 0.04445 0.00635
+      n_radial_elems = 4 8 4
+      material       = ss316 gap ss316
+      outer_bc_type  = None
+      roughness      = 3.2e-5
+    </C>
+    <C name="E8ToColdPool" type="ConvectiveHeatTransfer">
+      channel  = CV4
+      wall     = E8:wall:outer
+      reverse  = false
+      n_elems  = 8
+      aw       = 5.1427e-3
+      htc_type = 14
+      Ln       = 2.364
+    </C>
+    <C name="BZ8" type="Branch">
+      eos        = eos
+      connection = E8:outlet E9:inlet
+    </C>
+    <!--
+    |***********************************************************************
+    |  Intermediate Heat Exchanger Segment (IHX)
+    |***********************************************************************
+    -->
+    <!-- IHX primary side flow (in shell) -->
+    <C name="E9" type="OneDFluidComponent">
+      origin    = 0. 4.2779 4.939
+      direction = 0. 0. -1.
+      eos       = eos
+      n_elems   = 50
+      length    = 2.637
+      A         = 0.636
+      Dh        = 0.0163
+      fric_type = 2
+      PoD       = 1.30
+      roughness = 3.2e-5
+    </C>
+    <C name="EW9" type="ConvectiveHeatTransfer">
+      channel  = E9
+      wall     = ES9:inner
+      reverse  = false
+      n_elems  = 50
+      aw       = 6.3988
+    </C>
+    <C name="ES9" type="HeatStructure">
+      origin         = 0. 4.2 4.939
+      direction      = 0. 0. -1.
+      cylinder       = true
+      length         = 2.637
+      n_elems        = 50
+      inner_radius   = 0.6477
+      width          = 0.0127 0.0127 0.0127 0.0127 0.0127 0.0254 0.0254
+      n_radial_elems = 2 2 2 2 2 4 4
+      material       = ss316 gap ss316 gap ss316 gap ss316
+      outer_bc_type  = None
+    </C>
+    <C name="ES9ToColdPool" type="ConvectiveHeatTransfer">
+      channel  = CV4
+      wall     = ES9:outer
+      reverse  = false
+      n_elems  = 50
+      aw       = 3.8235e-2
+      htc_type = 14
+      Ln       = 2.637
+    </C>
+    <!-- Branch between IHX primary side outlet and outlet pipe -->
+    <C name="BIHX1" type="Branch">
+      eos        = eos
+      connection = E9:outlet E10:inlet
+    </C>
+    <!-- IHX outlet pipe -->
+    <C name="E10" type="OneDFluidComponent">
+      origin    = 0. 4.2779 2.302
+      direction = 0. 0. -1.0
+      eos       = eos
+      n_elems   = 8
+      length    = 0.173
+      A         = 0.642
+      Dh        = 0.0250
+      roughness = 3.2e-5
+    </C>
+    <!-- Heat transfer between tube outer wall and shell side fluid -->
+    <C name="IHXW1" type="ConvectiveHeatTransfer">
+      channel  = E9
+      wall     = E9W:outer
+      reverse  = true
+      n_elems  = 50
+      aw       = 237.362539
+      htc_type = 1
+      PoD      = 1.30
+      D_heated = 1.588e-2
+    </C>
+    <!-- IHX tube wall -->
+    <C name="E9W" type="HeatStructure">
+      origin         = 0  4.3279 2.302
+      direction      = 0. 0. 1.
+      cylinder       = true
+      length         = 2.637
+      inner_radius   = 6.70e-3
+      n_elems        = 50
+      width          = 1.24e-3
+      n_radial_elems = 10
+      material       = ss316
+    </C>
+    <!-- Heat transfer between tube inner wall and tube side fluid -->
+    <C name="IHXW2" type="ConvectiveHeatTransfer">
+      channel = E9s
+      wall    = E9W:inner
+      reverse = false
+      n_elems = 50
+      aw      = 298.507463
+    </C>
+    <!-- Inlet of IHX secondary side flow -->
+    <C name="E9sIn" type="TDJ">
+      eos        = eos
+      connection = E9s:inlet
+      u_bc       = UinS_fn
+      T_bc       = TinS_fn
+    </C>
+    <!--  IHX secondary side flow (in tube)-->
+    <C name="E9s" type="OneDFluidComponent">
+      origin    = 0. 4.3779 2.302
+      direction = 0. 0. 1.
+      eos       = eos
+      n_elems   = 50
+      length    = 2.637
+      A         = 0.4267
+      Dh        = 0.0134
+      initial_T = 574.27
+      initial_u = 0.82682
+      roughness = 3.2e-5
+    </C>
+    <!-- Outlet of IHX secondary side flow -->
+    <C name="E9sOut" type="TDV">
+      eos        = eos
+      connection = E9s:outlet
+      p_bc       = 2.0e5
+      T_bc       = 574.27
+    </C>
+
+    <!--
+    |***********************************************************************
+    |  Pump # 1 Pipe Network
+    |***********************************************************************
+    -->
+    <!-- Pump #1: Inlet -->
+    <C name="E11" type="Pipe">
+      origin         = 0. -5.2 3.694
+      direction      = 0. 0. 1.
+      eos            = eos
+      n_elems        = 8
+      length         = 0.826
+      A              = 0.0722
+      Dh             = 0.303
+      inner_radius   = 0.1515
+      width          = 1.031e-2
+      n_radial_elems = 4
+      material       = ss316
+      outer_bc_type  = None
+      roughness      = 3.2e-5
+    </C>
+    <C name="B11" type="Branch">
+      eos        = eos
+      connection = E11:outlet E12:inlet
+    </C>
+    <!-- Pump #1 -->
+    <C name="E12" type="Pipe">
+      origin         = 0. -5.014 4.520
+      direction      = 0. 0. -1.
+      eos            = eos
+      n_elems        = 8
+      length         = 1.074
+      A              = 0.0722
+      Dh             = 0.303
+      inner_radius   = 0.1515
+      width          = 1.031e-2
+      n_radial_elems = 4
+      material       = ss316
+      outer_bc_type  = None
+      roughness      = 3.2e-5
+    </C>
+    <C name="Pump1" type="Pump">
+      eos        = eos
+      connection = E12:outlet E13:inlet
+      head       = 299924.28
+      volume     = 0.00722
+      center     = 0. -5.014 3.446
+      width      = 0.2
+      height     = 0.2
+    </C>
+    <!-- Pump #1: Outlet -->
+    <C name="E13" type="Pipe">
+      origin         = 0. -5.014 3.446
+      direction      = 0. 0. -1.
+      eos            = eos
+      n_elems        = 8
+      length         = 2.164
+      A              = 0.0722
+      Dh             = 0.303
+      inner_radius   = 0.1515
+      width          = 1.031e-2
+      n_radial_elems = 4
+      material       = ss316
+      outer_bc_type  = None
+      roughness      = 3.2e-5
+    </C>
+    <!-- Pump #1: High-Pressure Inlet Pipe -->
+    <C name="E14" type="Pipe">
+      origin         = 0. -5.014 1.114
+      direction      = 0. 0. -1.
+      eos            = eos
+      n_elems        = 8
+      length         = 1.979
+      A              = 0.0722
+      Dh             = 0.303
+      inner_radius   = 0.1515
+      width          = 1.031e-2
+      n_radial_elems = 4
+      material       = ss316
+      outer_bc_type  = None
+      roughness      = 3.2e-5
+    </C>
+    <C name="B14" type="Branch">
+      eos        = eos
+      connection = E14:outlet E15:inlet
+      K = 0.5 0.0
+    </C>
+    <C name="E15" type="Pipe">
+      origin         = 0. -5.014 -0.865
+      direction      = 0. 1. 0.
+      eos            = eos
+      n_elems        = 8
+      length         = 2.870
+      A              = 0.0722
+      Dh             = 0.303
+      inner_radius   = 0.1515
+      width          = 1.031e-2
+      n_radial_elems = 4
+      material       = ss316
+      outer_bc_type  = None
+      roughness      = 3.2e-5
+    </C>
+    <C name="B15" type="Branch">
+      eos        = eos
+      connection = E15:outlet E16:inlet
+    </C>
+    <!-- E16: HP line outlet pipe to HP lower plenum -->
+    <C name="E16" type="Pipe">
+      origin         = 0. -2.144 -0.865
+      direction      = 0. 1. 0.
+      eos            = eos
+      n_elems        = 8
+      length         = 1.029
+      A              = 0.0722
+      Dh             = 0.303
+      inner_radius   = 0.1515
+      width          = 1.031e-2
+      n_radial_elems = 4
+      material       = ss316
+      outer_bc_type  = None
+      roughness      = 3.2e-5
+    </C>
+    <!-- Pump #1: Low-Pressure Inlet Pipe -->
+    <C name="E17" type="Pipe">
+      origin         = 0. -5.014 1.198
+      direction      = 0. 1. 0.
+      eos            = eos
+      n_elems        = 8
+      length         = 1.214
+      A              = 0.0186
+      Dh             = 0.154
+      inner_radius   = 0.077
+      width          = 7.112e-3
+      n_radial_elems = 4
+      material       = ss316
+      outer_bc_type  = None
+      roughness      = 3.2e-5
+    </C>
+    <C name="B17" type="Branch">
+      eos        = eos
+      connection = E17:outlet E18:inlet
+      K = 0.5 0.0
+    </C>
+    <C name="E18" type="Pipe">
+      origin         = 0. -3.800 1.198
+      direction      = 0. 0. 1.
+      eos            = eos
+      n_elems        = 8
+      length         = 3.099
+      A              = 0.00821
+      Dh             = 0.102
+      inner_radius   = 0.051
+      width          = 6.02e-3
+      n_radial_elems = 4
+      material       = ss316
+      outer_bc_type  = None
+      roughness      = 3.2e-5
+    </C>
+    <C name="B18" type="Branch">
+      eos        = eos
+      connection = E18:outlet E19:inlet
+    </C>
+    <C name="E19" type="Pipe">
+      origin         = 0. -3.800 4.297
+      direction      = 0. 1. 0.
+      eos            = eos
+      n_elems        = 8
+      length         = 0.457
+      A              = 0.00821
+      Dh             = 0.102
+      inner_radius   = 0.051
+      width          = 6.02e-3
+      n_radial_elems = 4
+      material       = ss316
+      outer_bc_type  = None
+      roughness      = 3.2e-5
+    </C>
+    <C name="LP1Valve" type="Branch">
+      eos        = eos
+      connection = E19:outlet E20:inlet
+      K = 1.45 0.0
+    </C>
+    <C name="E20" type="Pipe">
+      origin         = 0. -3.343 4.297
+      direction      = 0. 0. -1.
+      eos            = eos
+      n_elems        = 8
+      length         = 5.601
+      A              = 0.00821
+      Dh             = 0.102
+      inner_radius   = 0.051
+      width          = 6.02e-3
+      n_radial_elems = 4
+      material       = ss316
+      outer_bc_type  = None
+      roughness      = 3.2e-5
+    </C>
+    <C name="B20" type="Branch">
+      eos        = eos
+      connection = E20:outlet E21:inlet
+      K = 0.5 0.0
+    </C>
+    <!-- E21: pump 1 LP line outlet to LP lower plenum -->
+    <C name="E21" type="Pipe">
+      origin         = -4.15198 -3.343 -1.304
+      direction      = 4.15198  2.228 0.
+      eos            = eos
+      n_elems        = 8
+      length         = 4.712
+      A              = 0.00821
+      Dh             = 0.102
+      inner_radius   = 0.051
+      width          = 6.02e-3
+      n_radial_elems = 4
+      material       = ss316
+      outer_bc_type  = None
+      roughness      = 3.2e-5
+    </C>
+
+    <!--
+    |***********************************************************************
+    |  Pump # 2 Pipe Network
+    |***********************************************************************
+    -->
+    <!-- Pump #2: Inlet -->
+    <C name="E22" type="Pipe">
+      origin         = 0. 5.2 3.694
+      direction      = 0. 0.  1.
+      eos            = eos
+      n_elems        = 8
+      length         = 0.826
+      A              = 0.0722
+      Dh             = 0.303
+      inner_radius   = 0.1515
+      width          = 1.031e-2
+      n_radial_elems = 4
+      material       = ss316
+      outer_bc_type  = None
+      roughness      = 3.2e-5
+    </C>
+    <C name="B22" type="Branch">
+      eos        = eos
+      connection = E22:outlet E23:inlet
+    </C>
+    <!-- Pump #2 -->
+    <C name="E23" type="Pipe">
+      origin         = 0. 5.014 4.520
+      direction      = 0. 0. -1.
+      eos            = eos
+      n_elems        = 8
+      length         = 1.074
+      A              = 0.0722
+      Dh             = 0.303
+      inner_radius   = 0.1515
+      width          = 1.031e-2
+      n_radial_elems = 4
+      material       = ss316
+      outer_bc_type  = None
+      roughness      = 3.2e-5
+    </C>
+    <C name="Pump2" type="Pump">
+      eos        = eos
+      connection = E23:outlet E24:inlet
+      head       = 269368.2
+      volume     = 0.00722
+      center     = 0. 5.014 3.446
+      width      = 0.2
+      height     = 0.2
+    </C>
+    <!-- Pump #2: Outlet -->
+    <C name="E24" type="Pipe">
+      origin         = 0. 5.014 3.446
+      direction      = 0. 0. -1.
+      eos            = eos
+      n_elems        = 8
+      length         = 2.164
+      A              = 0.0722
+      Dh             = 0.303
+      inner_radius   = 0.1515
+      width          = 1.031e-2
+      n_radial_elems = 4
+      material       = ss316
+      outer_bc_type  = None
+      roughness      = 3.2e-5
+    </C>
+    <!-- Pump #2: High-Pressure Inlet Pipe -->
+    <C name="E25" type="Pipe">
+      origin         = 0. 5.014 1.114
+      direction      = 0. 0. -1.
+      eos            = eos
+      n_elems        = 8
+      length         = 1.979
+      A              = 0.0722
+      Dh             = 0.303
+      inner_radius   = 0.1515
+      width          = 1.031e-2
+      n_radial_elems = 4
+      material       = ss316
+      outer_bc_type  = None
+      roughness      = 3.2e-5
+    </C>
+    <C name="B25" type="Branch">
+      eos        = eos
+      connection = E25:outlet E26:inlet
+      K = 0.5 0.0
+    </C>
+    <C name="E26" type="Pipe">
+      origin         = 0. 5.014 -0.865
+      direction      = 0. -1. 0.
+      eos            = eos
+      n_elems        = 8
+      length         = 2.870
+      A              = 0.0722
+      Dh             = 0.303
+      inner_radius   = 0.1515
+      width          = 1.031e-2
+      n_radial_elems = 4
+      material       = ss316
+      outer_bc_type  = None
+      roughness      = 3.2e-5
+    </C>
+    <C name="B26" type="Branch">
+      eos        = eos
+      connection = E26:outlet E27:inlet
+    </C>
+    <!-- E27: pump 2 HP line outlet to HP lower plenum -->
+    <C name="E27" type="Pipe">
+      origin         = 0.  2.144 -0.865
+      direction      = 0. -1. 0.
+      eos            = eos
+      n_elems        = 8
+      length         = 1.029
+      A              = 0.0722
+      Dh             = 0.303
+      inner_radius   = 0.1515
+      width          = 1.031e-2
+      n_radial_elems = 4
+      material       = ss316
+      outer_bc_type  = None
+      roughness      = 3.2e-5
+    </C>
+    <!-- Pump #2: Low-Pressure Inlet Pipe -->
+    <C name="E28" type="Pipe">
+      origin         = 0.  5.014 1.198
+      direction      = 0. -1. 0.
+      eos            = eos
+      n_elems        = 8
+      length         = 1.214
+      A              = 0.0186
+      Dh             = 0.154
+      inner_radius   = 0.077
+      width          = 7.112e-3
+      n_radial_elems = 4
+      material       = ss316
+      outer_bc_type  = None
+      roughness      = 3.2e-5
+    </C>
+    <C name="B28" type="Branch">
+      eos        = eos
+      connection = E28:outlet E29:inlet
+      K = 0.5 0.0
+    </C>
+    <C name="E29" type="Pipe">
+      origin         = 0. 3.800 1.198
+      direction      = 0. 0. 1.
+      eos            = eos
+      n_elems        = 8
+      length         = 3.099
+      A              = 0.00821
+      Dh             = 0.102
+      inner_radius   = 0.051
+      width          = 6.02e-3
+      n_radial_elems = 4
+      material       = ss316
+      outer_bc_type  = None
+      roughness      = 3.2e-5
+    </C>
+    <C name="B29" type="Branch">
+      eos        = eos
+      connection = E29:outlet E30:inlet
+      K = 0.5 0.0
+    </C>
+    <C name="E30" type="Pipe">
+      origin         = 0. 3.800 4.297
+      direction      = 0. -1. 0.
+      eos            = eos
+      n_elems        = 8
+      length         = 0.457
+      A              = 0.00821
+      Dh             = 0.102
+      inner_radius   = 0.051
+      width          = 6.02e-3
+      n_radial_elems = 4
+      material       = ss316
+      outer_bc_type  = None
+      roughness      = 3.2e-5
+    </C>
+    <C name="LP2Valve" type="Branch">
+      eos        = eos
+      connection = E30:outlet E31:inlet
+      K = 1.45 0.0
+    </C>
+    <C name="E31" type="Pipe">
+      origin         = 0. 3.343 4.297
+      direction      = 0. 0. -1.
+      eos            = eos
+      n_elems        = 8
+      length         = 5.601
+      A              = 0.00821
+      Dh             = 0.102
+      inner_radius   = 0.051
+      width          = 6.02e-3
+      n_radial_elems = 4
+      material       = ss316
+      outer_bc_type  = None
+      roughness      = 3.2e-5
+    </C>
+    <C name="B31" type="Branch">
+      eos        = eos
+      connection = E31:outlet E32:inlet
+      K = 0.5 0.0
+    </C>
+    <!-- E32: pump 2 LP line outlet to LP lower plenum -->
+    <C name="E32" type="Pipe">
+      origin         = 4.15198  3.343 -1.304
+      direction      = -4.15198 -2.228  0.
+      eos            = eos
+      n_elems        = 8
+      length         = 4.712
+      A              = 0.00821
+      Dh             = 0.102
+      inner_radius   = 0.051
+      width          = 6.02e-3
+      n_radial_elems = 4
+      material       = ss316
+      outer_bc_type  = None
+      roughness      = 3.2e-5
+    </C>
+  </Component>
+</RETA>

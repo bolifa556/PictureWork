@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/new/prefix1">
+        <file>resource/icon/cube.svg</file>
+        <file>resource/icon/painter.svg</file>
+        <file>resource/icon/whiteArrow.svg</file>
+        <file>resource/icon/whiteHome.svg</file>
+        <file>resource/icon/calculate.svg</file>
+        <file>resource/icon/choosefile.svg</file>
+        <file>resource/icon/24gf-stop.svg</file>
+        <file>resource/icon/search.svg</file>
+        <file>resource/icon/delete.svg</file>
+        <file>resource/icon/setting.svg</file>
+    </qresource>
+</RCC>
